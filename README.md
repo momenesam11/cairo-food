@@ -94,3 +94,4 @@ public/images/about
 ## Notes
 
 The implementation uses the exported screenshots as the visual reference, including the dark navy header/footer, green accent system, cards, product listing layout, quality process, certificates, contact form, product detail cards, and mobile responsive structure.
+"# cairo-food" 
