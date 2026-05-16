@@ -9,9 +9,9 @@ export const company = {
   about:
     "Established in 2014, Cairo Food International is a trusted name in Egypt's food and agricultural sectors. We specialize in producing, packaging, and exporting premium Egyptian fruits, vegetables, and food products to international markets.",
   vision:
-    "To become the preferred global partner and trusted gateway for premium Egyptian food and agricultural products, setting new standards for quality, reliability, and supply excellence.",
+    "To become the preferred global partner and premier provider of premium Egyptian fresh and agricultural products, setting new standards for quality, reliability, and customer relations.",
   mission:
-    "To provide international markets with safe, healthy, and high-quality food products through an integrated supply chain that starts from trusted Egyptian farms and ends with careful sorting, packaging, and export handling.",
+    "To provide international markets with safe, healthy, and high-quality food products through an integrated supply chain that spans from prime Egyptian farms straight to world-class sorting, packaging, and export handling.",
   highlights: [
     "Export experience since 2014",
     "Fresh & frozen agricultural products",

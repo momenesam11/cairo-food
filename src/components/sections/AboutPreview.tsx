@@ -32,19 +32,19 @@ export function AboutPreview({ full = false }: { full?: boolean }) {
           <ul className="feature-list">
             <li>
               <span className="feature-icon">
-                <img src="/images/about/about-icon-box.png" alt="Export" />
+                <img src="/images/about/about-icon-box.svg" alt="Export" />
               </span>
               Export experience since 2014
             </li>
             <li>
               <span className="feature-icon">
-                <img src="/images/about/about-icon-leaf.png" alt="Fresh" />
+                <img src="/images/about/about-icon-leaf.svg" alt="Fresh" />
               </span>
               Fresh & frozen agricultural products
             </li>
             <li>
               <span className="feature-icon">
-                <img src="/images/about/about-icon-medal.png" alt="Trusted" />
+                <img src="/images/about/about-icon-medal.svg" alt="Trusted" />
               </span>
               Trusted international supply standards
             </li>

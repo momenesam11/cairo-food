@@ -26,7 +26,7 @@ export function PageHero({ title, highlighted, subtitle, background, active = "/
   }
 
   return (
-    <section className={`page-hero hero-${align} ${personImage ? 'has-person' : ''}`} style={{ backgroundImage: `linear-gradient(rgba(0,0,0,.4), rgba(0,0,0,.4)), url(${background})` }}>
+    <section className={`page-hero hero-${align} ${personImage ? 'has-person' : ''}`} style={{ backgroundImage: `linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)), url(${background})` }}>
       <Header active={active} />
       <div className="shell page-hero-content-wrapper">
         <div className="page-hero-content">

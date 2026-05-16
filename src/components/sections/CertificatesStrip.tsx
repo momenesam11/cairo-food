@@ -1,3 +1,5 @@
+import { certificates } from "@/data/certificates";
+
 export function CertificatesStrip() {
   return (
     <section className="shell cert-section">
@@ -8,9 +10,11 @@ export function CertificatesStrip() {
         </div>
         
         <div className="cert-logos">
-          <img src="/images/certificates/cert-iso.png" alt="ISO Certificate" />
-          <img src="/images/certificates/cert-gap.png" alt="Global G.A.P Certificate" />
-          <img src="/images/certificates/cert-smeta.png" alt="SMETA Certificate" />
+          {certificates.map(cert => (
+            <a key={cert.id} href="/about#certificates" className="cert-logo-link">
+              <img src={cert.logoImage} alt={cert.id} />
+            </a>
+          ))}
         </div>
       </div>
     </section>

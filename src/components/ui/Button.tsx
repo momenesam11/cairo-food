@@ -5,6 +5,7 @@ type Props = {
   href: string;
   children: ReactNode;
   variant?: "primary" | "ghost" | "light";
+  className?: string;
 };
 
 export function Button({ href, children, variant = "primary" }: Props) {
