@@ -18,9 +18,14 @@ export function ProductsGrid({ limit }: { limit?: number }) {
 
   const tabs = [
     { id: "All", label: t(T.products.tabs.all, lang) },
-    { id: "Fruits", label: t(T.products.tabs.fresh, lang) },
-    { id: "Vegetables", label: t(T.products.tabs.frozen, lang) } // NOTE: using 'fresh/frozen' keys here, ideally would add 'fruits' and 'vegetables' to T.products.tabs
+    { id: "Fruits", label: t(T.products.tabs.fruits, lang) },
+    { id: "Vegetables", label: t(T.products.tabs.vegetables, lang) }
   ];
+
+  const updatedDate = new Intl.DateTimeFormat(lang === 'ar' ? 'ar-EG' : 'en-US', {
+    month: 'long',
+    year: 'numeric',
+  }).format(new Date(2026, 2, 1));
 
   return (
     <section className="products-section shell">
@@ -42,7 +47,7 @@ export function ProductsGrid({ limit }: { limit?: number }) {
               </button>
             ))}
           </div>
-          <p className="updated">{t(T.products.updated, lang)}: March, 2026</p>
+          <p className="updated">{t(T.products.updated, lang)}: {updatedDate}</p>
         </div>
 
         <div className="product-grid">

@@ -13,47 +13,64 @@ export function ProductDetailsClient({ product }: { product: Product }) {
   const { lang } = useLang();
   const isAvailable = isSeasonAvailable(product.season.start, product.season.end);
 
-  const packingOptions = product.defaultPacking.length
-    ? product.defaultPacking
-    : ["As per client request"];
+  const packingOptions = lang === 'ar'
+    ? (product.defaultPackingAr?.length ? product.defaultPackingAr : product.defaultPacking)
+    : product.defaultPacking;
 
-  const availableSizes = product.sizes.length
-    ? product.sizes
-    : ["As per client request"];
+  const availableSizes = lang === 'ar'
+    ? (product.sizesAr?.length ? product.sizesAr : product.sizes)
+    : product.sizes;
     
-  const seasonInfo = product.season.label || `${product.season.start} to ${product.season.end}`;
-  const packingTypes = product.defaultPacking.length
-    ? product.defaultPacking
-    : ["As per client request"];
+  const seasonInfo = lang === 'ar'
+    ? product.season.labelAr ?? product.season.label
+    : product.season.label;
 
-  const subtitle = lang === 'ar' 
-    ? `منتجات ${product.name} مصرية فاخرة مُعدَّة للأسواق العالمية.` 
+  const packingTypes = packingOptions.length
+    ? packingOptions
+    : [lang === 'ar' ? 'حسب طلب العميل' : 'As per client request'];
+
+  const title = lang === 'ar' ? product.nameAr ?? product.name : product.name;
+  const description = lang === 'ar' ? product.descriptionAr ?? product.description : product.description;
+  const productNameForSubtitle = lang === 'ar' ? product.nameAr ?? product.name : product.name;
+
+  const categoryLabel = lang === 'ar'
+    ? product.categoryAr ?? (product.category === 'Fruits' ? 'فواكه طازجة' : product.category === 'Vegetables' ? 'خضروات طازجة' : 'منتجات طازجة')
+    : product.category;
+  const exportTypeLabel = lang === 'ar'
+    ? product.exportTypeAr ?? (product.exportType === 'Fresh Produce' ? 'منتجات طازجة' : product.exportType)
+    : product.exportType;
+  const originLabel = lang === 'ar'
+    ? product.originAr ?? (product.origin === 'Egypt' ? 'مصر' : product.origin)
+    : product.origin;
+
+  const subtitle = lang === 'ar'
+    ? `منتجات ${productNameForSubtitle} مصرية فاخرة مُعدَّة للأسواق العالمية.`
     : `Premium Egyptian ${product.name.toLowerCase()} prepared for global markets.`;
 
   return (
     <>
       <PageHero 
         heroKey="products" 
-        title={product.name} 
+        title={title} 
         subtitle={subtitle} 
         background="/images/hero/products-market.jpg" 
         align="left" 
       />
       <main className="product-details shell">
         <section className="product-overview-card">
-          <div className="product-details-image-wrapper">
+          <div className="product-details-image-wrapper relative h-[420px] w-full overflow-hidden rounded-[20px] bg-[#fafafa]">
             <Image 
               src={product.images.main} 
               alt={product.name} 
               fill
               priority
               sizes="(max-width: 900px) 100vw, 50vw"
-              style={{ objectFit: "cover" }}
+              className="object-cover"
             />
           </div>
           <div className="product-details-content">
-            <h1 className="product-details-title">{product.name}</h1>
-            <p className="product-details-desc">{product.description}</p>
+            <h1 className="product-details-title">{title}</h1>
+            <p className="product-details-desc">{description}</p>
             
             <div className={`availability-strip ${isAvailable ? "available" : "unavailable"}`}>
               <div className="availability-icon">
@@ -86,7 +103,7 @@ export function ProductDetailsClient({ product }: { product: Product }) {
                 </div>
                 <div className="spec-info-text">
                   <small>{t(T.products.category, lang)}</small>
-                  <strong>{product.category === "Fruits" ? (lang === 'ar' ? "فواكه طازجة" : "Fresh Fruit") : product.category === "Vegetables" ? (lang === 'ar' ? "خضروات طازجة" : "Fresh Vegetables") : product.category}</strong>
+                  <strong>{categoryLabel}</strong>
                 </div>
               </div>
 
@@ -99,7 +116,7 @@ export function ProductDetailsClient({ product }: { product: Product }) {
                 </div>
                 <div className="spec-info-text">
                   <small>{t(T.products.origin, lang)}</small>
-                  <strong>{lang === 'ar' && product.origin === 'Egypt' ? 'مصر' : product.origin}</strong>
+                  <strong>{originLabel}</strong>
                 </div>
               </div>
 
@@ -114,7 +131,7 @@ export function ProductDetailsClient({ product }: { product: Product }) {
                 </div>
                 <div className="spec-info-text">
                   <small>{lang === 'ar' ? 'نوع التصدير' : 'Export Type'}</small>
-                  <strong>{lang === 'ar' && product.exportType === 'Fresh Produce' ? 'منتجات طازجة' : product.exportType}</strong>
+                  <strong>{exportTypeLabel}</strong>
                 </div>
               </div>
             </div>
@@ -212,6 +229,10 @@ export function ProductDetailsClient({ product }: { product: Product }) {
           </div>
         </section>
         
+        {/* Product Details Packing Gallery - SCOPED STYLES ONLY */}
+        {/* wrapperClassName="product-details-gallery-item" ensures this gallery gets its own CSS variables */}
+        {/* --product-details-gallery-height (360px desktop) applies ONLY to elements with .product-details-gallery-item class */}
+        {/* This prevents any impact on About Us or other shared gallery uses */}
         <section className="packing-types">
           <div className="packing-text">
             <h2>{lang === 'ar' ? 'أنواع' : 'Packing'}<br /><strong>{lang === 'ar' ? 'التعبئة' : 'Types'}</strong></h2>
@@ -226,7 +247,11 @@ export function ProductDetailsClient({ product }: { product: Product }) {
               ))}
             </ul>
           </div>
-          <PackingGallery images={product.images.packing?.length ? product.images.packing : ["/images/products/packing-1.jpg", "/images/products/packing-2.jpg", "/images/products/packing-3.jpg"]} />
+          <PackingGallery
+            images={product.images.packing?.length ? product.images.packing : ["/images/products/packing-1.jpg", "/images/products/packing-2.jpg", "/images/products/packing-3.jpg"]}
+            wrapperHeight="360px"
+            wrapperClassName="product-details-gallery-item h-60 sm:h-auto"
+          />
         </section>
       </main>
       <Footer />

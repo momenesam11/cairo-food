@@ -27,11 +27,13 @@ export const translations = {
     },
     products: {
       title:       { en: "Our Products",      ar: "منتجاتنا" },
+      highlighted: { en: "Products",          ar: "منتجات" },
       subtitle:    { en: "Explore our wide range of premium Egyptian agricultural and food products, ready for international export.", ar: "استعرض مجموعتنا الواسعة من المنتجات الزراعية والغذائية المصرية عالية الجودة، المُهيَّأة للتصدير الدولي." },
     },
     certificates: {
-      title:       { en: "Our Certificates",  ar: "شهاداتنا" },
-      subtitle:    { en: "Internationally recognized certifications that reflect our commitment to quality, safety, and global food standards.", ar: "شهادات معتمدة دولياً تعكس التزامنا بالجودة والسلامة ومعايير الغذاء العالمية." },
+      title:       { en: "Quality Assurance & Certifications",  ar: "ضمان الجودة والشهادات" },
+      highlighted: { en: "Certifications", ar: "الشهادات" },
+      subtitle:    { en: "Certified quality and trusted standards for safe, reliable, and export-ready food products. We adhere to international food safety management systems.", ar: "جودة معتمدة ومعايير موثوقة لمنتجات غذائية آمنة، موثوقة، وجاهزة للتصدير. نلتزم بأنظمة إدارة سلامة الغذاء الدولية." },
     },
     contact: {
       title:       { en: "Contact Us",        ar: "تواصل معنا" },
@@ -65,13 +67,13 @@ export const translations = {
   // ─── Vision / Mission ────────────────────────────────────────
   vm: {
     ourVision:   { en: "Our",     ar: "رؤيتنا" },
-    vision:      { en: "Vision",  ar: "" },
+    vision:      { en: "Vision",  ar: "رؤيتنا" },
     ourMission:  { en: "Our",     ar: "مهمتنا" },
-    mission:     { en: "Mission", ar: "" },
+    mission:     { en: "Mission", ar: "مهمتنا" },
     visionText:  { en: "To become the preferred global partner and premier provider of premium Egyptian fresh and agricultural products, setting new standards for quality, reliability, and customer relations.", ar: "أن نصبح الشريك العالمي المفضل والمزود الأول للمنتجات الطازجة والزراعية المصرية، مُرسِّخين معايير جديدة للجودة والموثوقية وعلاقات العملاء." },
     missionText: { en: "To provide international markets with safe, healthy, and high-quality food products through an integrated supply chain that spans from prime Egyptian farms straight to world-class sorting, packaging, and export handling.", ar: "توفير أسواق دولية بمنتجات غذائية آمنة وصحية وعالية الجودة، عبر سلسلة توريد متكاملة تمتد من أفضل المزارع المصرية حتى الفرز والتعبئة وإجراءات التصدير بمستوى عالمي." },
     gallery:     { en: "Our",     ar: "معرضنا" },
-    galleryStrong:{ en: "Gallery", ar: "" },
+    galleryStrong:{ en: "Gallery", ar: "المعرض" },
   },
 
   // ─── Process Preview ─────────────────────────────────────────
@@ -112,7 +114,7 @@ export const translations = {
   // ─── Certificates Strip ──────────────────────────────────────
   cert: {
     label:   { en: "Our",          ar: "شهاداتنا" },
-    heading: { en: "Certificates", ar: "" },
+    heading: { en: "Certificates", ar: "الشهادات" },
     viewAll: { en: "View Certificates", ar: "عرض الشهادات" },
   },
 
@@ -168,9 +170,9 @@ export const translations = {
   // ─── Products Page ───────────────────────────────────────────
   products: {
     tabs: {
-      all:    { en: "All",    ar: "الكل" },
-      fresh:  { en: "Fresh",  ar: "طازج" },
-      frozen: { en: "Frozen", ar: "مجمد" },
+      all:        { en: "All",          ar: "الكل" },
+      fruits:     { en: "Fruits",       ar: "فواكه" },
+      vegetables: { en: "Vegetables",   ar: "خضروات" },
     },
     updated:       { en: "Updated regularly", ar: "يُحدَّث بانتظام" },
     viewDetails:   { en: "View Details",      ar: "عرض التفاصيل" },

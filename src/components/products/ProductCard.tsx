@@ -4,17 +4,17 @@ import type { Product } from "@/types/product";
 import { translations as T, t, Lang } from "@/lib/translations";
 
 export function ProductCard({ product, lang }: { product: Product, lang: Lang }) {
-  // Since data is in English, we'll try to use Arabic if provided, or fallback to english.
-  // For a full app we'd translate the data source too. Here we render what we have.
-  // If product.name_ar exists we'd use it, but since we don't know the full data struct, we'll just use the english for now or attempt translation.
-  // Let's pass the UI elements in translated form.
-  
+  const name = lang === 'ar' ? product.nameAr ?? product.name : product.name;
+  const category = lang === 'ar' ? product.categoryAr ?? (product.category === 'Fruits' ? 'فواكه طازجة' : product.category === 'Vegetables' ? 'خضروات طازجة' : 'منتجات طازجة') : product.category;
+  const shortDescription = lang === 'ar' ? product.shortDescriptionAr ?? product.shortDescription : product.shortDescription;
+  const imageAlt = lang === 'ar' ? `${name} - ${category}` : `${name} - ${category}`;
+
   return (
     <article className="product-card">
       <div className="product-image">
         <Image 
           src={product.images.card} 
-          alt={product.name} 
+          alt={imageAlt} 
           fill
           sizes="(max-width: 900px) 50vw, 33vw"
           style={{ objectFit: 'cover' }}
@@ -22,10 +22,10 @@ export function ProductCard({ product, lang }: { product: Product, lang: Lang })
       </div>
       <div className="product-card-body">
         <div className="product-card-head">
-          <h3 className="">{product.name}</h3>
-          <span className="category-tag">{product.category}</span>
+          <h3 className="">{name}</h3>
+          <span className="category-tag">{category}</span>
         </div>
-        <p>{product.shortDescription}</p>
+        <p>{shortDescription}</p>
         <Link href={`/products/${product.slug}`} className="view-details-btn">
           {t(T.products.viewDetails, lang)} 
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ transform: lang === 'ar' ? 'scaleX(-1)' : 'none' }}>

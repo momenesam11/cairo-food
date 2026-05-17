@@ -8,7 +8,7 @@ import { PackagingOptions } from "@/components/sections/PackagingOptions";
 export default function ProductsPage() {
   return (
     <>
-      <PageHero heroKey="products" active="/products" title="Our Products" highlighted="Products" subtitle="Premium Egyptian fruits, vegetables, and food supply solutions for global markets." background="/images/hero/products-market.jpg" actions />
+      <PageHero heroKey="products" active="/products" background="/images/hero/products-market.jpg" actions />
       <ProductCategories />
       <ProductsGrid />
       <ProcessPreview horizontal />

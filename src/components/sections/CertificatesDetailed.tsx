@@ -19,11 +19,11 @@ export function CertificatesDetailed() {
               </div>
             </div>
             <div className="cert-info">
-              <span className="cert-eyebrow">{cert.eyebrow}</span>
-              <h3 className="cert-title">{cert.title}</h3>
-              <p className="cert-desc">{cert.desc}</p>
+              <span className="cert-eyebrow">{lang === 'ar' ? cert.eyebrowAr ?? cert.eyebrow : cert.eyebrow}</span>
+              <h3 className="cert-title">{lang === 'ar' ? cert.titleAr ?? cert.title : cert.title}</h3>
+              <p className="cert-desc">{lang === 'ar' ? cert.descAr ?? cert.desc : cert.desc}</p>
               <div className="cert-brand-logo">
-                <img src={cert.logoImage} alt={cert.id} />
+                <img src={cert.logoImage} alt={lang === 'ar' ? cert.eyebrowAr ?? cert.eyebrow : cert.eyebrow} />
               </div>
             </div>
           </div>

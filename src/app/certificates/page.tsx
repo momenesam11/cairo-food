@@ -8,9 +8,6 @@ export default function CertificatesPage() {
       <PageHero 
         heroKey="certificates"
         active="/certificates" 
-        title="Quality Assurance & Certifications" 
-        highlighted="Certificates" 
-        subtitle="Certified quality and trusted standards for safe, reliable, and export-ready food products. We adhere to international food safety management systems." 
         background="/images/hero/certificates-bg.jpg" 
       />
       
