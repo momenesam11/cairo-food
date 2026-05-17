@@ -11,7 +11,7 @@ export function ProcessPreview({ horizontal = false }: { horizontal?: boolean })
   return (
     <section className={`process-wrap ${horizontal ? "process-horizontal" : ""}`}>
       <div className="shell">
-        <div className="section-title-center-lines">
+        <div className="section-title-center-lines ">
           <span>Quality</span>
           <strong>Process Preview</strong>
         </div>

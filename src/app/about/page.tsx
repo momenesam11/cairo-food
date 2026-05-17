@@ -4,6 +4,7 @@ import { PageHero } from "@/components/layout/PageHero";
 import { WhoWeAre } from "@/components/sections/WhoWeAre";
 import { ProcessPreview } from "@/components/sections/ProcessPreview";
 import { ContactSection } from "@/components/sections/ContactSection";
+import { PackingGallery } from "@/components/products/PackingGallery";
 import { CertificatesDetailed } from "@/components/sections/CertificatesDetailed";
 import { company } from "@/data/company";
 
@@ -38,12 +39,9 @@ export default function AboutPage() {
       </section>
       <ProcessPreview />
       
-      <section className="shell gallery-grid">
-        {[1,2,3,4,5,6].map((n) => (
-          <div key={n} className="gallery-grid-item">
-            <Image src={`/images/gallery/gallery-${n}.jpg`} alt={`Cairo Food gallery ${n}`} width={460} height={720} />
-          </div>
-        ))}
+      <section className="shell about-gallery-section" style={{ padding: '80px 0' }}>
+        <h2 style={{ textAlign: 'center', marginBottom: '40px', fontSize: '32px', color: 'var(--navy)' }}>Our <strong>Gallery</strong></h2>
+        <PackingGallery images={[1,2,3,4,5,6].map((n) => `/images/gallery/gallery-${n}.jpg`)} wrapperHeight="460px" />
       </section>
       <ContactSection />
       <Footer />

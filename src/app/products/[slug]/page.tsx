@@ -5,6 +5,7 @@ import { Footer } from "@/components/layout/Footer";
 import { PageHero } from "@/components/layout/PageHero";
 import { getProductBySlug, products, isSeasonAvailable } from "@/data/products";
 import { Icon } from "@/components/ui/Icon";
+import { PackingGallery } from "@/components/products/PackingGallery";
 import type { Metadata } from "next";
 
 export function generateStaticParams() {
@@ -23,10 +24,18 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
   if (!product) notFound();
 
   const isAvailable = isSeasonAvailable(product.season.start, product.season.end);
+const packingOptions = product.defaultPacking.length
+  ? product.defaultPacking
+  : ["As per client request"];
 
-  const sizeCards = product.defaultPacking.length ? product.defaultPacking.slice(0, 3) : ["15 kg Carton", "8 kg Carton", "5 kg Carton"];
-  const diameter = product.sizes.length ? product.sizes.slice(0, 9) : ["81–84", "85–88", "89–92", "93–96", "97–100", "101–104", "105–108", "109–112", "113–116"];
-  const packingTypes = product.defaultPacking.length ? product.defaultPacking : ["Telescope carton 15kg.", "Plastic box 15kg, 8kg.", "Open top carton 15kg, 8kg."];
+const availableSizes = product.sizes.length
+  ? product.sizes
+  : ["As per client request"];
+const seasonInfo = product.season.label || `${product.season.start} to ${product.season.end}`;
+const packingTypes = product.defaultPacking.length
+  ? product.defaultPacking
+  : ["As per client request"];
+
 
   return (
     <>
@@ -128,32 +137,133 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
           </div>
         </section>
         <section className="size-section">
-          <h2>Size & <strong>Packing Options</strong></h2>
-          <div className="size-grid">
-            {sizeCards.map((pack, i) => (
-              <article key={`${pack}-${i}`}>
-                <h3>
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
-                    <path d="m3.3 7 8.7 5 8.7-5" />
-                    <path d="M12 22V12" />
-                  </svg>
-                  {pack}
-                </h3>
-                <hr />
-                <div className="size-card-body">
-                  <h4>Average Diameter (mm)</h4>
-                  <div className="size-tags">
-                    {diameter.map((size) => <span key={size}>{size}</span>)}
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
+  <h2>
+    Size & <strong>Packing Options</strong>
+  </h2>
+
+  <div className="size-grid">
+    <article>
+      <h3>
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+          <path d="m3.3 7 8.7 5 8.7-5" />
+          <path d="M12 22V12" />
+        </svg>
+        Packing Options
+      </h3>
+
+      <hr />
+
+      <div className="size-card-body">
+        <h4>Available Packing</h4>
+        <div className="size-tags">
+          {packingOptions.map((pack) => (
+            <span key={pack}>{pack}</span>
+          ))}
+        </div>
+      </div>
+    </article>
+
+    <article>
+      <h3>
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <path d="M8 12h8" />
+          <path d="M12 8v8" />
+        </svg>
+        Available Sizes
+      </h3>
+
+      <hr />
+
+      <div className="size-card-body">
+        <h4>Sizes / Diameter</h4>
+        <div className="size-tags">
+          {availableSizes.map((size) => (
+            <span key={size}>{size}</span>
+          ))}
+        </div>
+      </div>
+    </article>
+
+    <article className={`availability-card ${isAvailable ? 'card-in-season' : 'card-out-of-season'}`}>
+  {isAvailable ? (
+    <svg className="bg-status-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+  ) : (
+    <svg className="bg-status-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  )}
+  <h3>
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect x="3" y="4" width="18" height="18" rx="2" />
+      <path d="M16 2v4" />
+      <path d="M8 2v4" />
+      <path d="M3 10h18" />
+    </svg>
+    Season Availability
+  </h3>
+
+  <hr />
+
+  <div className="size-card-body relative-body">
+    <div className="availability-status">
+      <div className="status-indicator"></div>
+      <span style={{ fontWeight: 700, color: 'white' }}>{isAvailable ? 'Currently in Season' : 'Out of Season'}</span>
+    </div>
+    <div className="season-months">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+      <span>{seasonInfo}</span>
+    </div>
+  </div>
+</article>
+  </div>
+</section>
         <section className="packing-types">
-          <div className="packing-text"><h2>Packing<br /><strong>Types</strong></h2><ul>{packingTypes.map((item) => <li key={item}><Icon name="check" /> {item}</li>)}</ul></div>
-          <div className="packing-gallery">{(product.images.packing?.length ? product.images.packing : ["/images/products/packing-1.jpg", "/images/products/packing-2.jpg", "/images/products/packing-3.jpg"]).slice(0,3).map((src) => <Image key={src} src={src} alt="Packing" width={320} height={320} />)}</div>
+          <div className="packing-text">
+            <h2>Packing<br /><strong>Types</strong></h2>
+            <ul>
+              {packingTypes.map((item) => (
+                <li key={item}>
+                  <svg className="check-icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <PackingGallery images={product.images.packing?.length ? product.images.packing : ["/images/products/packing-1.jpg", "/images/products/packing-2.jpg", "/images/products/packing-3.jpg"]} />
         </section>
       </main>
       <Footer />

@@ -19,10 +19,15 @@ export const metadata: Metadata = {
   description: "Premium Egyptian fresh produce and food supply exports for global markets.",
 };
 
+import { GlobalScrollReveal } from "@/components/layout/GlobalScrollReveal";
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${cairo.variable} ${roboto.variable}`}>
-      <body>{children}</body>
+      <body>
+        <GlobalScrollReveal />
+        {children}
+      </body>
     </html>
   );
 }

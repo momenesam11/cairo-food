@@ -78,17 +78,19 @@ export function ContactSection() {
           <div className="form-row">
             <div className="form-group">
               <label>Country</label>
-              <Select 
-                options={options} 
-                value={country}
-                onChange={(val: any) => {
-                  setCountry(val);
-                }}
-                placeholder="Select Country"
-                styles={customSelectStyles}
-                className="react-select-container"
-                classNamePrefix="react-select"
-              />
+              <Select
+  instanceId="contact-country-select"
+  inputId="contact-country-input"
+  options={options}
+  value={country}
+  onChange={(val: any) => {
+    setCountry(val);
+  }}
+  placeholder="Select Country"
+  styles={customSelectStyles}
+  className="react-select-container"
+  classNamePrefix="react-select"
+/>
             </div>
             <div className="form-group">
               <label>Email Address</label>
