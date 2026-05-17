@@ -37,9 +37,7 @@ export default function AboutPage() {
         </article>
       </section>
       <ProcessPreview />
-      <div id="certificates">
-        <CertificatesDetailed />
-      </div>
+      
       <section className="shell gallery-grid">
         {[1,2,3,4,5,6].map((n) => (
           <div key={n} className="gallery-grid-item">

@@ -39,7 +39,11 @@ export function Footer() {
             </p>
             <p>
               <img src="/images/contact/contact-icon-office.png" alt="Pin" />
-              <span>{company.address}</span>
+              <span><strong>Main Office:</strong> {company.address}</span>
+            </p>
+            <p>
+              <img src="/images/contact/contact-icon-factory.png" alt="Factory" />
+              <span><strong>Packing House:</strong> {company.packingHouse}</span>
             </p>
           </div>
         </div>
