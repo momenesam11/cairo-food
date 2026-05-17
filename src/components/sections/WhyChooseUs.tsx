@@ -1,42 +1,29 @@
-const features = [
-  {
-    title: "Quality Control",
-    text: "Strict Quality Checks Across Every Stage Of Production And Export.",
-    icon: "why-icon-quality.png",
-    color: "#00122e"
-  },
-  {
-    title: "Global Reach",
-    text: "Serving International Markets Across Europe, Asia, And Africa.",
-    icon: "why-icon-global.png",
-    color: "#015c44"
-  },
-  {
-    title: "Reliable Commitment",
-    text: "Committed To Timely Delivery And Long-Term Business Partnerships.",
-    icon: "why-icon-commitment.png",
-    color: "#689d00"
-  }
-];
+"use client";
+import { useLang } from "@/lib/LanguageContext";
+import { translations as T, t } from "@/lib/translations";
+
+const icons = ["why-icon-quality.png", "why-icon-global.png", "why-icon-commitment.png"];
+const colors = ["#00122e", "#015c44", "#689d00"];
 
 export function WhyChooseUs() {
+  const { lang } = useLang();
   return (
     <section className="shell why-section-new">
       <div className="why-title-area">
         <div className="side-title">
-          <span>Why</span>
-          <h3>Choose Us</h3>
+          <span>{t(T.why.label, lang)}</span>
+          <h3>{t(T.why.heading, lang)}</h3>
         </div>
       </div>
-      
+
       <div className="why-features-grid">
-        {features.map((item, index) => (
+        {T.why.features.map((item, index) => (
           <article className="why-card" key={index}>
-            <div className="why-icon-box" style={{ backgroundColor: item.color }}>
-              <img src={`/images/why/${item.icon}`} alt={item.title} />
+            <div className="why-icon-box" style={{ backgroundColor: colors[index] }}>
+              <img src={`/images/why/${icons[index]}`} alt={t(item.title, lang)} />
             </div>
-            <h4>{item.title}</h4>
-            <p>{item.text}</p>
+            <h4>{t(item.title, lang)}</h4>
+            <p>{t(item.text, lang)}</p>
           </article>
         ))}
       </div>

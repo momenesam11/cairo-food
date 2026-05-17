@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Cairo, Roboto } from "next/font/google";
 import "./globals.css";
+import { LanguageProvider } from "@/lib/LanguageContext";
+import { GlobalScrollReveal } from "@/components/layout/GlobalScrollReveal";
 
 const cairo = Cairo({
   subsets: ["arabic", "latin"],
@@ -15,18 +17,19 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "Cairo Food International",
-  description: "Premium Egyptian fresh produce and food supply exports for global markets.",
+  title: "Cairo Food International | كايرو فود إنترناشيونال",
+  description:
+    "Premium Egyptian fresh produce and food supply exports for global markets. | تصدير أجود المنتجات الطازجة والغذائية المصرية للأسواق العالمية.",
 };
-
-import { GlobalScrollReveal } from "@/components/layout/GlobalScrollReveal";
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${cairo.variable} ${roboto.variable}`}>
+    <html lang="en" dir="ltr" className={`${cairo.variable} ${roboto.variable}`}>
       <body>
-        <GlobalScrollReveal />
-        {children}
+        <LanguageProvider>
+          <GlobalScrollReveal />
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );

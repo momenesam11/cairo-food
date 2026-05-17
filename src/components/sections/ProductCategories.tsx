@@ -1,28 +1,34 @@
-import { Icon } from "@/components/ui/Icon";
-import { SectionTitle } from "@/components/ui/SectionTitle";
+"use client";
+import { useLang } from "@/lib/LanguageContext";
+import { translations as T, t } from "@/lib/translations";
 
-const categories = [
-  { title: "Fresh Produce", icon: "/images/icons/icon-fresh.svg" },
-  { title: "Frozen Produce", icon: "/images/icons/icon-frozen.svg" },
-  { title: "Agri Crops", icon: "/images/icons/icon-crops.svg" }
+const icons = [
+  "/images/icons/icon-fresh.svg",
+  "/images/icons/icon-frozen.svg",
+  "/images/icons/icon-crops.svg",
 ];
 
 export function ProductCategories() {
+  const { lang } = useLang();
   return (
     <section className="shell categories-section">
       <div className="category-title-wrap">
-        <h2>Product <strong>Categories</strong></h2>
+        <h2>
+          {t(T.categories.heading, lang)}{" "}
+          <strong>{t(T.categories.headingStrong, lang)}</strong>
+        </h2>
       </div>
-      <p>High-quality produce and food supplies, carefully sourced and prepared to meet the needs of global buyers.</p>
+      <p>{t(T.categories.body, lang)}</p>
+
       <div className="category-grid">
-        {categories.map((cat, index) => (
-          <article key={index} className={`category-card ${index === 1 ? 'navy' : ''}`}>
+        {T.categories.cats.map((cat, index) => (
+          <article key={index} className={`category-card ${index === 1 ? "navy" : ""}`}>
             <div className="category-icon-box">
-              <img src={cat.icon} alt={cat.title} />
+              <img src={icons[index]} alt={t(cat.title, lang)} />
             </div>
             <div className="category-content">
-              <h3>{cat.title}</h3>
-              <p>Farm-Fresh Fruits And Vegetables Handpicked At Peak Ripeness For Maximum Quality And Flavor.</p>
+              <h3>{t(cat.title, lang)}</h3>
+              <p>{t(cat.desc, lang)}</p>
             </div>
           </article>
         ))}

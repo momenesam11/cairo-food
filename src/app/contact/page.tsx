@@ -6,6 +6,7 @@ export default function ContactPage() {
   return (
     <>
       <PageHero 
+        heroKey="contact"
         active="/contact" 
         title="Get in Touch with Cairo Food" 
         highlighted="Contact Us" 

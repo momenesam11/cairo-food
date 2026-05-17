@@ -1148,3 +1148,71 @@ img { max-width: 100%; height: auto; object-fit: cover; }
   .cert-logo-link { flex: 1; display: flex; justify-content: center; align-items: center; max-width: 30%; }
   .cert-logos img { max-height: 50px; width: 100%; height: auto; object-fit: contain; }
 }
+
+/* RTL Overrides */
+[dir="rtl"] body {
+  font-family: var(--font-cairo), sans-serif;
+}
+
+[dir="rtl"] .hero-left .page-hero-content { text-align: right; }
+[dir="rtl"] .products-header .section-title { border-left: none; border-right: 4px solid var(--green); padding-left: 0; padding-right: 22px; }
+[dir="rtl"] .products-header { text-align: right; }
+[dir="rtl"] .side-title { border-left: none; border-right: 4px solid var(--green); padding-left: 0; padding-right: 20px; }
+[dir="rtl"] .cert-card .section-title { border-left: none; border-right: 4px solid var(--green); padding-left: 0; padding-right: 20px; }
+[dir="rtl"] .who-title { border-left: none; border-right: 4px solid var(--green); padding-left: 0; padding-right: 20px; }
+[dir="rtl"] .vm-header { border-left: none; border-right: 3px solid white; padding-left: 0; padding-right: 20px; }
+[dir="rtl"] .packing-text h2 { border-left: none; border-right: 4px solid var(--green); padding-left: 0; padding-right: 20px; }
+[dir="rtl"] .section-title-center-lines::before { border-radius: 99px 0 0 99px; }
+[dir="rtl"] .section-title-center-lines::after { border-radius: 0 99px 99px 0; }
+
+[dir="rtl"] .collage-top-left { right: 0; left: auto; }
+[dir="rtl"] .collage-bottom-right { left: 0; right: auto; }
+
+[dir="rtl"] .timeline-item:not(:last-child)::after { left: auto; right: 35px; }
+
+[dir="rtl"] .quote-start { left: auto; right: 15px; }
+[dir="rtl"] .quote-end { right: auto; left: 15px; }
+
+[dir="rtl"] .phone-input-wrap .react-tel-input .phone-field-main { padding-left: 10px !important; padding-right: 58px !important; }
+[dir="rtl"] .phone-input-wrap .react-tel-input .phone-field-btn { border-radius: 0 8px 8px 0 !important; right: 0; left: auto; }
+[dir="rtl"] .phone-input-wrap .react-tel-input .selected-flag { padding-left: 10px; }
+
+[dir="rtl"] .certificate-row.reverse .cert-info { text-align: right; direction: rtl; }
+[dir="rtl"] .cert-info { text-align: right; }
+
+[dir="rtl"] .category-card { text-align: right; }
+[dir="rtl"] .why-card { text-align: right; }
+[dir="rtl"] .shipment-card { text-align: right; }
+[dir="rtl"] .timeline-content { text-align: right; }
+[dir="rtl"] .packing-card { text-align: right; }
+[dir="rtl"] .packaging-main { text-align: right; }
+[dir="rtl"] .size-grid article { text-align: right; }
+[dir="rtl"] .markets-content { text-align: right; }
+[dir="rtl"] .contact-info-card { text-align: right; }
+[dir="rtl"] .form-group label { text-align: right; }
+
+[dir="rtl"] .markets-globe { right: auto; left: -100px; transform: translateY(-35%) scaleX(-1); }
+
+@media (max-width: 900px) {
+  [dir="rtl"] .mobile-menu { transform: translateX(-100%); }
+  [dir="rtl"] .mobile-menu.is-open { transform: translateX(0); }
+  [dir="rtl"] .products-header .section-title { padding-right: 20px; padding-left: 0; border-right: 4px solid var(--green); border-left: none; }
+  [dir="rtl"] .timeline-item:not(:last-child)::after { right: 28px; left: auto; }
+  [dir="rtl"] .markets-globe { left: -80px; right: auto; transform: scaleX(-1); }
+  [dir="rtl"] .packaging-main { text-align: right; }
+  [dir="rtl"] .shipment-card { text-align: right; }
+  [dir="rtl"] .hero-left .page-hero-content { text-align: center; }
+}
+
+[dir="rtl"] .lightbox-nav.prev { left: auto; right: 30px; transform: translateY(-50%) scaleX(-1); }
+[dir="rtl"] .lightbox-nav.next { right: auto; left: 30px; transform: translateY(-50%) scaleX(-1); }
+[dir="rtl"] .lightbox-close { right: auto; left: 30px; }
+@media (max-width: 768px) {
+  [dir="rtl"] .lightbox-nav.prev { right: 15px; }
+  [dir="rtl"] .lightbox-nav.next { left: 15px; }
+  [dir="rtl"] .lightbox-close { left: 15px; }
+}
+[dir="rtl"] .footer-col { text-align: right; }
+[dir="rtl"] .footer-contact p { text-align: right; }
+[dir="rtl"] .slider-arrow.prev { left: auto; right: 5px; transform: translateY(-50%) scaleX(-1); }
+[dir="rtl"] .slider-arrow.next { right: auto; left: 5px; transform: translateY(-50%) scaleX(-1); }

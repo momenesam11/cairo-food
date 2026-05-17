@@ -1,33 +1,47 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { company } from "@/data/company";
-import { navigation } from "@/data/navigation";
+import { useLang } from "@/lib/LanguageContext";
+import { translations as T, t } from "@/lib/translations";
+
+const navItems = [
+  { key: "home",         href: "/" },
+  { key: "about",        href: "/about" },
+  { key: "products",     href: "/products" },
+  { key: "certificates", href: "/certificates" },
+] as const;
 
 export function Footer() {
+  const { lang } = useLang();
   return (
     <footer className="footer">
       <div className="shell footer-grid">
         <div className="footer-brand">
           <Image src="/images/brand/logo-footer.png" alt="Cairo Food" width={260} height={92} priority />
         </div>
-        
+
         <div className="footer-col hide-mobile">
-          <h4>Company</h4>
+          <h4>{t(T.footer.company, lang)}</h4>
           <div className="footer-links">
-            {navigation.map((item) => <Link key={item.href} href={item.href}>{item.label}</Link>)}
+            {navItems.map((item) => (
+              <Link key={item.href} href={item.href}>
+                {t(T.nav[item.key as keyof typeof T.nav] as { en: string; ar: string }, lang)}
+              </Link>
+            ))}
           </div>
         </div>
-        
+
         <div className="footer-col hide-mobile">
-          <h4>Legal</h4>
+          <h4>{t(T.footer.legal, lang)}</h4>
           <div className="footer-links">
-            <Link href="#">Privacy Policy</Link>
-            <Link href="#">Terms & Services</Link>
+            <Link href="#">{t(T.footer.privacy, lang)}</Link>
+            <Link href="#">{t(T.footer.terms, lang)}</Link>
           </div>
         </div>
-        
+
         <div className="footer-col hide-mobile">
-          <h4>Reach us</h4>
+          <h4>{t(T.footer.reach, lang)}</h4>
           <div className="footer-contact">
             <p>
               <img src="/images/contact/contact-icon-phone.png" alt="Phone" />
@@ -39,20 +53,20 @@ export function Footer() {
             </p>
             <p>
               <img src="/images/contact/contact-icon-office.png" alt="Pin" />
-              <span><strong>Main Office:</strong> {company.address}</span>
+              <span><strong>{t(T.footer.mainOffice, lang)}</strong> {company.address}</span>
             </p>
             <p>
               <img src="/images/contact/contact-icon-factory.png" alt="Factory" />
-              <span><strong>Packing House:</strong> {company.packingHouse}</span>
+              <span><strong>{t(T.footer.packingHouse, lang)}</strong> {company.packingHouse}</span>
             </p>
           </div>
         </div>
       </div>
-      
+
       <div className="shell">
-        <div className="footer-divider"></div>
+        <div className="footer-divider" />
         <div className="footer-bottom">
-          <p>© 2026 Cairo Food. Proudly powered by Momen Esam</p>
+          <p>{t(T.footer.copyright, lang)}</p>
         </div>
       </div>
     </footer>

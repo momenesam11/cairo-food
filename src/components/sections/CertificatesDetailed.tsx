@@ -1,6 +1,10 @@
+"use client";
 import { certificates } from "@/data/certificates";
+import { useLang } from "@/lib/LanguageContext";
+import { translations as T, t } from "@/lib/translations";
 
 export function CertificatesDetailed() {
+  const { lang } = useLang();
   return (
     <section className="shell cert-section-detailed">
       <div className="cert-list">
@@ -10,7 +14,7 @@ export function CertificatesDetailed() {
               <img src={cert.image} alt={cert.title} />
               <div className="cert-overlay">
                 <a href={cert.pdf} target="_blank" rel="noreferrer" className="view-cert-btn">
-                  View Certificate
+                  {t(T.certs.viewCert, lang)}
                 </a>
               </div>
             </div>

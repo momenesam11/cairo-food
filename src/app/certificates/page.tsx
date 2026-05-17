@@ -6,6 +6,7 @@ export default function CertificatesPage() {
   return (
     <>
       <PageHero 
+        heroKey="certificates"
         active="/certificates" 
         title="Quality Assurance & Certifications" 
         highlighted="Certificates" 

@@ -5,20 +5,19 @@ import Select from "react-select";
 import countryList from "country-list";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { useLang } from "@/lib/LanguageContext";
+import { translations as T, t } from "@/lib/translations";
 
 export function ContactSection() {
-  const [phone, setPhone] = useState("");
+  const { lang } = useLang();
+  const [phone, setPhone]   = useState("");
   const [country, setCountry] = useState<any>(null);
 
-  // Prepare country options
-  const options = useMemo(() => {
-    return countryList.getData().map((c) => ({
-      value: c.code,
-      label: c.name,
-    }));
-  }, []);
+  const options = useMemo(
+    () => countryList.getData().map((c) => ({ value: c.code, label: c.name })),
+    []
+  );
 
-  // Custom styles for react-select to match the identity
   const customSelectStyles = {
     control: (base: any) => ({
       ...base,
@@ -29,19 +28,21 @@ export function ContactSection() {
       boxShadow: "none",
       minHeight: "48px",
     }),
-    placeholder: (base: any) => ({
-      ...base,
-      color: "#999",
-      fontSize: "14px",
-    }),
+    placeholder: (base: any) => ({ ...base, color: "#999", fontSize: "14px" }),
   };
 
   return (
     <section id="contact" className="contact-section-new shell">
+      {/* ─── Info card ─── */}
       <div className="contact-info-card">
-        <h2>Ready to Import Premium<br /><strong>Egyptian</strong> Products?</h2>
-        <p>Get in touch with Cairo Food International to request product availability, pricing, export details, or partnership opportunities tailored to your market.</p>
-        
+        <h2>
+          {t(T.contact.heading, lang)}
+          <br />
+          <strong>{t(T.contact.headingBold, lang)}</strong>{" "}
+          {t(T.contact.headingSuffix, lang)}
+        </h2>
+        <p>{t(T.contact.body, lang)}</p>
+
         <ul className="contact-details-list">
           <li>
             <img src="/images/contact/contact-icon-phone.png" alt="Phone" />
@@ -49,58 +50,65 @@ export function ContactSection() {
           </li>
           <li>
             <img src="/images/contact/contact-icon-office.png" alt="Office" />
-            <span>Main Office: {company.address}</span>
+            <span>
+              {t(T.contact.mainOffice, lang)} {company.address}
+            </span>
           </li>
           <li>
             <img src="/images/contact/contact-icon-factory.png" alt="Factory" />
-            <span>Packing House: {company.packingHouse}</span>
+            <span>
+              {t(T.contact.packingHouse, lang)} {company.packingHouse}
+            </span>
           </li>
           <li>
             <img src="/images/contact/contact-icon-mail.png" alt="Mail" />
-            <span>{company.email}<br />{company.secondaryEmail}</span>
+            <span>
+              {company.email}
+              <br />
+              {company.secondaryEmail}
+            </span>
           </li>
         </ul>
       </div>
-      
+
+      {/* ─── Form ─── */}
       <div className="contact-form-area">
         <form className="modern-form">
           <div className="form-row">
             <div className="form-group">
-              <label>First Name</label>
-              <input type="text" placeholder="e.g Mohammed" />
+              <label>{t(T.contact.firstName, lang)}</label>
+              <input type="text" placeholder={t(T.contact.firstPlaceholder, lang)} />
             </div>
             <div className="form-group">
-              <label>Last Name</label>
-              <input type="text" placeholder="e.g Yasser" />
+              <label>{t(T.contact.lastName, lang)}</label>
+              <input type="text" placeholder={t(T.contact.lastPlaceholder, lang)} />
             </div>
           </div>
-          
+
           <div className="form-row">
             <div className="form-group">
-              <label>Country</label>
+              <label>{t(T.contact.country, lang)}</label>
               <Select
-  instanceId="contact-country-select"
-  inputId="contact-country-input"
-  options={options}
-  value={country}
-  onChange={(val: any) => {
-    setCountry(val);
-  }}
-  placeholder="Select Country"
-  styles={customSelectStyles}
-  className="react-select-container"
-  classNamePrefix="react-select"
-/>
+                instanceId="contact-country-select"
+                inputId="contact-country-input"
+                options={options}
+                value={country}
+                onChange={(val: any) => setCountry(val)}
+                placeholder={t(T.contact.countryPlaceholder, lang)}
+                styles={customSelectStyles}
+                className="react-select-container"
+                classNamePrefix="react-select"
+              />
             </div>
             <div className="form-group">
-              <label>Email Address</label>
-              <input type="email" placeholder="e.g abc@gmail.com" />
+              <label>{t(T.contact.email, lang)}</label>
+              <input type="email" placeholder={t(T.contact.emailPlaceholder, lang)} />
             </div>
           </div>
-          
+
           <div className="form-row">
             <div className="form-group">
-              <label>Phone Number</label>
+              <label>{t(T.contact.phone, lang)}</label>
               <div className="phone-input-wrap">
                 <PhoneInput
                   country={country ? country.value.toLowerCase() : "eg"}
@@ -113,23 +121,23 @@ export function ContactSection() {
               </div>
             </div>
             <div className="form-group">
-              <label>Company Name</label>
-              <input type="text" placeholder="e.g ISEM" />
+              <label>{t(T.contact.company, lang)}</label>
+              <input type="text" placeholder={t(T.contact.companyPlaceholder, lang)} />
             </div>
           </div>
-          
+
           <div className="form-group full-width">
-            <label>Message</label>
-            <textarea placeholder="e.g I ask about ...."></textarea>
+            <label>{t(T.contact.message, lang)}</label>
+            <textarea placeholder={t(T.contact.messagePlaceholder, lang)} />
           </div>
-          
+
           <div className="form-buttons">
             <button type="button" className="whatsapp-btn">
-              <img src="/images/social/social-wa.png"  className="w-[24px] h-[24px]"   alt="WA" />
-              <span>WhatsApp</span>
+              <img src="/images/social/social-wa.png" className="w-[24px] h-[24px]" alt="WA" />
+              <span>{t(T.contact.whatsapp, lang)}</span>
             </button>
             <button type="submit" className="send-btn">
-              <span>Send</span>
+              <span>{t(T.contact.send, lang)}</span>
               <img src="/images/contact/icon-send.png" className="w-[30px] h-[30px]" alt="Send" />
             </button>
           </div>
