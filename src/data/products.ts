@@ -1,70 +1,48 @@
 import type { Product } from "@/types/product";
 
+const MONTH_DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+const MONTHS: Record<string, number> = {
+  jan: 1,
+  feb: 2,
+  mar: 3,
+  apr: 4,
+  may: 5,
+  jun: 6,
+  jul: 7,
+  aug: 8,
+  sep: 9,
+  oct: 10,
+  nov: 11,
+  dec: 12,
+};
+
+function toDayOfYear(month: number, day: number) {
+  return MONTH_DAYS.slice(0, month - 1).reduce((total, days) => total + days, 0) + day;
+}
+
+function parseSeasonPoint(value: string, type: "start" | "end") {
+  const isMid = value.toLowerCase().startsWith("mid");
+  const monthKey = value.replace(/^mid\s+/i, "").slice(0, 3).toLowerCase();
+  const month = MONTHS[monthKey] ?? 1;
+  const day = isMid ? 15 : type === "start" ? 1 : MONTH_DAYS[month - 1];
+
+  return toDayOfYear(month, day);
+}
+
+export function isSeasonAvailable(start: string, end: string, date = new Date()) {
+  const current = toDayOfYear(date.getMonth() + 1, date.getDate());
+  const seasonStart = parseSeasonPoint(start, "start");
+  const seasonEnd = parseSeasonPoint(end, "end");
+
+  if (seasonStart <= seasonEnd) {
+    return current >= seasonStart && current <= seasonEnd;
+  }
+
+  return current >= seasonStart || current <= seasonEnd;
+}
+
 export const products: Product[] = [
-  {
-    id: "orange",
-    slug: "orange",
-    name: "Orange",
-    category: "Fruits",
-    origin: "Egypt",
-    exportType: "Fresh Produce",
-    shortDescription: "Fresh Egyptian orange prepared with natural quality, export handling, and reliable supply standards.",
-    description: "Our Egyptian orange are cultivated in ideal conditions and carefully selected to ensure premium quality, freshness, and export-ready shelf life.",
-    season: {"start": "Dec", "end": "Feb", "label": "Available from Dec to Feb"},
-    images: {"card": "/images/products/orange1.jpg", "main": "/images/products/orange-large1.jpg", "packing": ["/images/products/packing-1.jpg", "/images/products/packing-2.jpg", "/images/products/packing-3.jpg"]},
-    defaultPacking: ["15kg carton box"],
-    sizes: ["48-80", "72-300", "56-200", "64-100 mm"],
-    variants: [],
-    featured: true
-  },
-  {
-    id: "valencia-oranges",
-    slug: "valencia-oranges",
-    name: "Valencia Oranges",
-    category: "Fruits",
-    origin: "Egypt",
-    exportType: "Fresh Produce",
-    shortDescription: "Fresh Egyptian valencia oranges prepared with natural quality, export handling, and reliable supply standards.",
-    description: "Our Egyptian valencia oranges are cultivated in ideal conditions and carefully selected to ensure premium quality, freshness, and export-ready shelf life.",
-    season: {"start": "Feb", "end": "May", "label": "Available from Feb to May"},
-    images: {"card": "/images/products/orange1.jpg", "main": "/images/products/orange-large1.jpg", "packing": ["/images/products/packing-1.jpg", "/images/products/packing-2.jpg", "/images/products/packing-3.jpg"]},
-    defaultPacking: ["15kg carton box"],
-    sizes: ["48-80", "72-300", "56-200", "64-100 mm"],
-    variants: [],
-    featured: true
-  },
-  {
-    id: "avocado",
-    slug: "avocado",
-    name: "Avocado",
-    category: "Fruits",
-    origin: "Egypt",
-    exportType: "Fresh Produce",
-    shortDescription: "Creamy Hass avocados with smooth texture, ideal for export programs.",
-    description: "Creamy Hass avocados with a smooth texture, perfect for guacamole, salads, and fresh produce programs.",
-    season: {"start": "Sep", "end": "Jan", "label": "Available from Sep. to Jan"},
-    images: {"card": "/images/products/avocado1.jpg", "main": "/images/products/avocado1.jpg", "packing": []},
-    defaultPacking: ["4kg carton", "Custom packaging"],
-    sizes: ["12 / 14 / 16 / 18 / 20 / 22"],
-    variants: ["Hass"],
-    featured: true
-  },
-  {
-    id: "kiwi",
-    slug: "kiwi",
-    name: "Kiwi",
-    category: "Fruits",
-    origin: "Egypt",
-    exportType: "Fresh Produce",
-    shortDescription: "Vibrant green kiwis bursting with tangy sweetness and high vitamin C.",
-    description: "Vibrant green kiwis bursting with tangy sweetness, high in vitamin C, sourced from trusted orchard partners.",
-    season: {"start": "Mar", "end": "May", "label": "Available from Mar. to May"},
-    images: {"card": "/images/products/kiwi1.jpg", "main": "/images/products/kiwi1.jpg", "packing": []},
-    defaultPacking: ["Carton box", "Custom packaging"],
-    sizes: ["Standard export size"],
-    variants: ["Green kiwi"],
-    featured: true
-  },
   {
     id: "potatoes",
     slug: "potatoes",
@@ -72,14 +50,31 @@ export const products: Product[] = [
     category: "Vegetables",
     origin: "Egypt",
     exportType: "Fresh Produce",
-    shortDescription: "Fresh Egyptian potatoes prepared with natural quality, export handling, and reliable supply standards.",
-    description: "Our Egyptian potatoes are cultivated in ideal conditions and carefully selected to ensure premium quality, freshness, and export-ready shelf life.",
-    season: {"start": "Mid Dec", "end": "Mid Jul", "label": "Available from Mid Dec to Mid Jul"},
-    images: {"card": "/images/products/kiwi1.jpg", "main": "/images/products/kiwi1.jpg", "packing": []},
-    defaultPacking: ["25kg", "20kg", "10kg jute bags", "25kg mesh bags"],
-    sizes: ["45mm", "50mm", "55mm", "60mm +"],
+    shortDescription: "Fresh Egyptian potatoes selected, sorted, and packed for reliable export quality.",
+    description:
+      "Our Egyptian potatoes are sourced from trusted farms and handled through careful sorting and packing processes to deliver consistent size, freshness, and shelf-life for international markets.",
+    season: {
+      start: "Mid Dec",
+      end: "Mid Jul",
+      label: "Available from Mid Dec to Mid Jul",
+    },
+    images: {
+      card: "/images/products/potatoes/potatoes-card.jpg",
+      main: "/images/products/potatoes/potatoes-main.jpg",
+      packing: [
+        "/images/products/potatoes/potatoes-packing-1.jpg",
+        "/images/products/potatoes/potatoes-packing-2.jpg",
+        "/images/products/potatoes/potatoes-packing-3.jpg",
+        "/images/products/potatoes/potatoes-packing-4.jpg",
+        "/images/products/potatoes/potatoes-packing-5.jpg",
+        "/images/products/potatoes/potatoes-packing-6.jpg",
+        "/images/products/potatoes/potatoes-packing-7.jpg",
+      ],
+    },
+    defaultPacking: ["25kg jute bags", "20kg jute bags", "10kg jute bags", "25kg mesh bags"],
+    sizes: ["45mm", "50mm", "55mm", "60mm+"],
     variants: ["Spunta (Earth-Desert)", "Cara", "Belen"],
-    featured: false
+    featured: isSeasonAvailable("Mid Dec", "Mid Jul"),
   },
   {
     id: "carrots",
@@ -88,14 +83,36 @@ export const products: Product[] = [
     category: "Vegetables",
     origin: "Egypt",
     exportType: "Fresh Produce",
-    shortDescription: "Fresh Egyptian carrots prepared with natural quality, export handling, and reliable supply standards.",
-    description: "Our Egyptian carrots are cultivated in ideal conditions and carefully selected to ensure premium quality, freshness, and export-ready shelf life.",
-    season: {"start": "Jan", "end": "Jul", "label": "Available from Jan to Jul"},
-    images: {"card": "/images/products/kiwi1.jpg", "main": "/images/products/kiwi1.jpg", "packing": []},
-    defaultPacking: ["Jumbo bags", "10kg", "1kg bags"],
-    sizes: ["diameter: 25-35", "25-40", "30 - 50", "40+ mm", "length: 13-25 cm"],
+    shortDescription: "Fresh Egyptian carrots with clean shape, bright color, and export-ready packing.",
+    description:
+      "Our carrots are selected for freshness, firmness, and consistent sizing, then packed according to client requirements for wholesale and international supply programs.",
+    season: {
+      start: "Jan",
+      end: "Jul",
+      label: "Available from Jan to Jul",
+    },
+    images: {
+      card: "/images/products/carrots/carrots-card.jpg",
+      main: "/images/products/carrots/carrots-main.jpg",
+      packing: [
+        "/images/products/carrots/carrots-packing-1.jpg",
+        "/images/products/carrots/carrots-packing-2.jpg",
+        "/images/products/carrots/carrots-packing-3.jpg",
+        "/images/products/carrots/carrots-packing-4.jpg",
+        "/images/products/carrots/carrots-packing-5.jpg",
+        "/images/products/carrots/carrots-packing-6.jpg",
+      ],
+    },
+    defaultPacking: ["Jumbo bags", "10kg bags", "1kg bags"],
+    sizes: [
+      "Diameter: 25-35 mm",
+      "Diameter: 25-40 mm",
+      "Diameter: 30-50 mm",
+      "Diameter: 40+ mm",
+      "Length: 13-25 cm",
+    ],
     variants: [],
-    featured: false
+    featured: isSeasonAvailable("Jan", "Jul"),
   },
   {
     id: "yellow-onions",
@@ -104,14 +121,30 @@ export const products: Product[] = [
     category: "Vegetables",
     origin: "Egypt",
     exportType: "Fresh Produce",
-    shortDescription: "Fresh Egyptian yellow onions prepared with natural quality, export handling, and reliable supply standards.",
-    description: "Our Egyptian yellow onions are cultivated in ideal conditions and carefully selected to ensure premium quality, freshness, and export-ready shelf life.",
-    season: {"start": "Feb", "end": "Sep", "label": "Available from Feb to Sep"},
-    images: {"card": "/images/products/kiwi1.jpg", "main": "/images/products/kiwi1.jpg", "packing": []},
-    defaultPacking: ["25kg", "18kg", "10kg", "5kg bags"],
+    shortDescription: "Premium Egyptian yellow onions prepared for stable export supply.",
+    description:
+      "Our yellow onions are carefully cured, graded, and packed to maintain quality during storage, handling, and long-distance shipping.",
+    season: {
+      start: "Feb",
+      end: "Sep",
+      label: "Available from Feb to Sep",
+    },
+    images: {
+      card: "/images/products/yellow-onions/yellow-onions-card.jpg",
+      main: "/images/products/yellow-onions/yellow-onions-main.jpg",
+      packing: [
+        "/images/products/yellow-onions/yellow-onions-packing-1.jpg",
+        "/images/products/yellow-onions/yellow-onions-packing-2.jpg",
+        "/images/products/yellow-onions/yellow-onions-packing-3.jpg",
+        "/images/products/yellow-onions/yellow-onions-packing-4.jpg",
+        "/images/products/yellow-onions/yellow-onions-packing-5.jpg",
+        "/images/products/yellow-onions/yellow-onions-packing-6.jpg",
+      ],
+    },
+    defaultPacking: ["25kg bags", "18kg bags", "10kg bags", "5kg bags"],
     sizes: ["35-50 mm", "45-65 mm", "50-70 mm", "50-80 mm", "60-80 mm", "80-100 mm"],
     variants: [],
-    featured: false
+    featured: isSeasonAvailable("Feb", "Sep"),
   },
   {
     id: "red-onions",
@@ -120,14 +153,28 @@ export const products: Product[] = [
     category: "Vegetables",
     origin: "Egypt",
     exportType: "Fresh Produce",
-    shortDescription: "Fresh Egyptian red onions prepared with natural quality, export handling, and reliable supply standards.",
-    description: "Our Egyptian red onions are cultivated in ideal conditions and carefully selected to ensure premium quality, freshness, and export-ready shelf life.",
-    season: {"start": "May", "end": "Oct", "label": "Available from May to Oct"},
-    images: {"card": "/images/products/kiwi1.jpg", "main": "/images/products/kiwi1.jpg", "packing": []},
-    defaultPacking: ["25kg", "18kg", "10kg", "5kg bags"],
+    shortDescription: "Fresh Egyptian red onions with strong color and consistent export grading.",
+    description:
+      "Our red onions are selected for firm texture, rich color, and reliable quality, then packed in multiple weight options to match client and market needs.",
+    season: {
+      start: "May",
+      end: "Oct",
+      label: "Available from May to Oct",
+    },
+    images: {
+      card: "/images/products/red-onions/red-onions-card.jpg",
+      main: "/images/products/red-onions/red-onions-main.jpg",
+      packing: [
+        "/images/products/red-onions/red-onions-packing-1.jpg",
+        "/images/products/red-onions/red-onions-packing-2.jpg",
+        "/images/products/red-onions/red-onions-packing-3.jpg",
+        "/images/products/red-onions/red-onions-packing-4.jpg",
+      ],
+    },
+    defaultPacking: ["25kg bags", "18kg bags", "10kg bags", "5kg bags"],
     sizes: ["35-50 mm", "45-65 mm", "50-70 mm", "50-80 mm", "60-80 mm", "80-100 mm"],
     variants: [],
-    featured: false
+    featured: isSeasonAvailable("May", "Oct"),
   },
   {
     id: "spring-onions",
@@ -136,14 +183,29 @@ export const products: Product[] = [
     category: "Vegetables",
     origin: "Egypt",
     exportType: "Fresh Produce",
-    shortDescription: "Fresh Egyptian spring onions prepared with natural quality, export handling, and reliable supply standards.",
-    description: "Our Egyptian spring onions are cultivated in ideal conditions and carefully selected to ensure premium quality, freshness, and export-ready shelf life.",
-    season: {"start": "Oct", "end": "Mid Mar", "label": "Available from Oct to Mid Mar"},
-    images: {"card": "/images/products/kiwi1.jpg", "main": "/images/products/kiwi1.jpg", "packing": []},
-    defaultPacking: ["25-10 kg bags", "2.5kg carton box", "as per client request"],
+    shortDescription: "Fresh spring onions packed carefully for food service and export markets.",
+    description:
+      "Our spring onions are harvested fresh, cleaned, and packed with attention to appearance, length, and freshness according to client specifications.",
+    season: {
+      start: "Oct",
+      end: "Mid Mar",
+      label: "Available from Oct to Mid Mar",
+    },
+    images: {
+      card: "/images/products/spring-onions/spring-onions-card.jpg",
+      main: "/images/products/spring-onions/spring-onions-main.jpg",
+      packing: [
+        "/images/products/spring-onions/spring-onions-packing-1.jpg",
+        "/images/products/spring-onions/spring-onions-packing-2.jpg",
+        "/images/products/spring-onions/spring-onions-packing-3.jpg",
+        "/images/products/spring-onions/spring-onions-packing-4.jpg",
+        "/images/products/spring-onions/spring-onions-packing-5.jpg",
+      ],
+    },
+    defaultPacking: ["25kg bags", "10kg bags", "2.5kg carton box", "As per client request"],
     sizes: ["Length as per client request"],
     variants: [],
-    featured: false
+    featured: isSeasonAvailable("Oct", "Mid Mar"),
   },
   {
     id: "sweet-potatoes",
@@ -152,14 +214,28 @@ export const products: Product[] = [
     category: "Vegetables",
     origin: "Egypt",
     exportType: "Fresh Produce",
-    shortDescription: "Fresh Egyptian sweet potatoes prepared with natural quality, export handling, and reliable supply standards.",
-    description: "Our Egyptian sweet potatoes are cultivated in ideal conditions and carefully selected to ensure premium quality, freshness, and export-ready shelf life.",
-    season: {"start": "Jul", "end": "Mar", "label": "Available from Jul to Mar"},
-    images: {"card": "/images/products/kiwi1.jpg", "main": "/images/products/kiwi1.jpg", "packing": []},
-    defaultPacking: ["6kg carton box", "as per client request"],
-    sizes: ["S-M-L1-L2-XL"],
+    shortDescription: "Egyptian sweet potatoes with natural sweetness and export-grade packing.",
+    description:
+      "Our sweet potatoes are selected for clean skin, balanced size, and rich flavor, making them suitable for retail, wholesale, and international fresh produce programs.",
+    season: {
+      start: "Jul",
+      end: "Mar",
+      label: "Available from Jul to Mar",
+    },
+    images: {
+      card: "/images/products/sweet-potatoes/sweet-potatoes-card.jpg",
+      main: "/images/products/sweet-potatoes/sweet-potatoes-main.jpg",
+      packing: [
+        "/images/products/sweet-potatoes/sweet-potatoes-packing-1.jpg",
+        "/images/products/sweet-potatoes/sweet-potatoes-packing-2.jpg",
+        "/images/products/sweet-potatoes/sweet-potatoes-packing-3.jpg",
+        "/images/products/sweet-potatoes/sweet-potatoes-packing-4.jpg",
+      ],
+    },
+    defaultPacking: ["6kg carton box", "As per client request"],
+    sizes: ["S", "M", "L1", "L2", "XL"],
     variants: [],
-    featured: false
+    featured: isSeasonAvailable("Jul", "Mar"),
   },
   {
     id: "green-garlic",
@@ -168,14 +244,27 @@ export const products: Product[] = [
     category: "Vegetables",
     origin: "Egypt",
     exportType: "Fresh Produce",
-    shortDescription: "Fresh Egyptian green garlic prepared with natural quality, export handling, and reliable supply standards.",
-    description: "Our Egyptian green garlic are cultivated in ideal conditions and carefully selected to ensure premium quality, freshness, and export-ready shelf life.",
-    season: {"start": "Feb", "end": "Apr", "label": "Available from Feb to Apr"},
-    images: {"card": "/images/products/kiwi1.jpg", "main": "/images/products/kiwi1.jpg", "packing": []},
-    defaultPacking: ["10kg bag", "box", "as per client request"],
-    sizes: ["40-50", "50-65", "50-70", "60-80 mm"],
+    shortDescription: "Fresh Egyptian green garlic with strong aroma and reliable seasonal supply.",
+    description:
+      "Our green garlic is handled with care from harvest to packing to preserve freshness, flavor, and market-ready presentation.",
+    season: {
+      start: "Feb",
+      end: "Apr",
+      label: "Available from Feb to Apr",
+    },
+    images: {
+      card: "/images/products/green-garlic/green-garlic-card.jpg",
+      main: "/images/products/green-garlic/green-garlic-main.jpg",
+      packing: [
+        "/images/products/green-garlic/green-garlic-packing-1.jpg",
+        "/images/products/green-garlic/green-garlic-packing-2.jpg",
+        "/images/products/green-garlic/green-garlic-packing-3.jpg",
+      ],
+    },
+    defaultPacking: ["10kg bag", "Box", "As per client request"],
+    sizes: ["40-50 mm", "50-65 mm", "50-70 mm", "60-80 mm"],
     variants: [],
-    featured: false
+    featured: isSeasonAvailable("Feb", "Apr"),
   },
   {
     id: "dry-garlic",
@@ -184,46 +273,150 @@ export const products: Product[] = [
     category: "Vegetables",
     origin: "Egypt",
     exportType: "Fresh Produce",
-    shortDescription: "Fresh Egyptian dry garlic prepared with natural quality, export handling, and reliable supply standards.",
-    description: "Our Egyptian dry garlic are cultivated in ideal conditions and carefully selected to ensure premium quality, freshness, and export-ready shelf life.",
-    season: {"start": "May", "end": "Aug", "label": "Available from May to Aug"},
-    images: {"card": "/images/products/kiwi1.jpg", "main": "/images/products/kiwi1.jpg", "packing": []},
-    defaultPacking: ["11", "10", "8", "1 kg bags", "10kg plastic box"],
-    sizes: ["40-50", "50-60", "60-70", "60+ mm"],
+    shortDescription: "Dry Egyptian garlic prepared with consistent sizing and export packing.",
+    description:
+      "Our dry garlic is cured, sorted, and packed to support stable shelf life, strong aroma, and reliable quality for international buyers.",
+    season: {
+      start: "May",
+      end: "Aug",
+      label: "Available from May to Aug",
+    },
+    images: {
+      card: "/images/products/dry-garlic/dry-garlic-card.jpg",
+      main: "/images/products/dry-garlic/dry-garlic-main.jpg",
+      packing: [
+        "/images/products/dry-garlic/dry-garlic-packing-1.jpg",
+        "/images/products/dry-garlic/dry-garlic-packing-2.jpg",
+        "/images/products/dry-garlic/dry-garlic-packing-3.jpg",
+        "/images/products/dry-garlic/dry-garlic-packing-4.jpg",
+      ],
+    },
+    defaultPacking: ["11kg bags", "10kg bags", "8kg bags", "1kg bags", "10kg plastic box"],
+    sizes: ["40-50 mm", "50-60 mm", "60-70 mm", "60+ mm"],
     variants: [],
-    featured: false
+    featured: isSeasonAvailable("May", "Aug"),
+  },
+  {
+    id: "navel-oranges",
+    slug: "navel-oranges",
+    name: "Navel Oranges",
+    category: "Fruits",
+    origin: "Egypt",
+    exportType: "Fresh Produce",
+    shortDescription: "Fresh Egyptian Navel oranges with bright color and premium export quality.",
+    description:
+      "Our Navel oranges are carefully selected for sweetness, appearance, and juice content, then packed in export-ready cartons for international markets.",
+    season: {
+      start: "Dec",
+      end: "Feb",
+      label: "Available from Dec to Feb",
+    },
+    images: {
+      card: "/images/products/navel-oranges/navel-oranges-card.jpg",
+      main: "/images/products/navel-oranges/navel-oranges-main.jpg",
+      packing: [
+        "/images/products/navel-oranges/navel-oranges-packing-1.jpg",
+        "/images/products/navel-oranges/navel-oranges-packing-2.jpg",
+        "/images/products/navel-oranges/navel-oranges-packing-3.jpg",
+      ],
+    },
+    defaultPacking: ["15kg carton box"],
+    sizes: ["48-80 mm", "72-300 mm", "56-200 mm", "64-100 mm"],
+    variants: [],
+    featured: isSeasonAvailable("Dec", "Feb"),
+  },
+  {
+    id: "valencia-oranges",
+    slug: "valencia-oranges",
+    name: "Valencia Oranges",
+    category: "Fruits",
+    origin: "Egypt",
+    exportType: "Fresh Produce",
+    shortDescription: "Fresh Egyptian Valencia oranges known for juicing quality and stable supply.",
+    description:
+      "Our Valencia oranges are selected and packed to deliver freshness, strong juice content, and consistent quality for export and wholesale programs.",
+    season: {
+      start: "Feb",
+      end: "May",
+      label: "Available from Feb to May",
+    },
+    images: {
+      card: "/images/products/valencia-oranges/valencia-oranges-card.jpg",
+      main: "/images/products/valencia-oranges/valencia-oranges-main.jpg",
+      packing: [
+        "/images/products/valencia-oranges/valencia-oranges-packing-1.jpg",
+        "/images/products/valencia-oranges/valencia-oranges-packing-2.jpg",
+        "/images/products/valencia-oranges/valencia-oranges-packing-3.jpg",
+        "/images/products/valencia-oranges/valencia-oranges-packing-4.jpg",
+      ],
+    },
+    defaultPacking: ["15kg carton box"],
+    sizes: ["48-80 mm", "72-300 mm", "56-200 mm", "64-100 mm"],
+    variants: [],
+    featured: isSeasonAvailable("Feb", "May"),
   },
   {
     id: "mandarines",
     slug: "mandarines",
     name: "Mandarines",
-    category: "Vegetables",
+    category: "Fruits",
     origin: "Egypt",
     exportType: "Fresh Produce",
-    shortDescription: "Fresh Egyptian mandarines prepared with natural quality, export handling, and reliable supply standards.",
-    description: "Our Egyptian mandarines are cultivated in ideal conditions and carefully selected to ensure premium quality, freshness, and export-ready shelf life.",
-    season: {"start": "Nov", "end": "Mar", "label": "Available from Nov to Mar"},
-    images: {"card": "/images/products/kiwi1.jpg", "main": "/images/products/kiwi1.jpg", "packing": []},
-    defaultPacking: ["15 kg plastic or carton boxes", "9 kg carton box"],
+    shortDescription: "Sweet Egyptian mandarines prepared for fresh export markets.",
+    description:
+      "Our mandarines are selected for easy peeling, balanced sweetness, and attractive appearance, with flexible packing options for different market needs.",
+    season: {
+      start: "Nov",
+      end: "Mar",
+      label: "Available from Nov to Mar",
+    },
+    images: {
+      card: "/images/products/mandarines/mandarines-card.jpg",
+      main: "/images/products/mandarines/mandarines-main.jpg",
+      packing: [
+        "/images/products/mandarines/mandarines-packing-1.jpg",
+        "/images/products/mandarines/mandarines-packing-2.jpg",
+        "/images/products/mandarines/mandarines-packing-3.jpg",
+        "/images/products/mandarines/mandarines-packing-4.jpg",
+        "/images/products/mandarines/mandarines-packing-5.jpg",
+        "/images/products/mandarines/mandarines-packing-6.jpg",
+      ],
+    },
+    defaultPacking: ["15kg plastic boxes", "15kg carton boxes", "9kg carton box"],
     sizes: ["48-54-64 mm", "63-74 mm", "67-78 mm", "78+ mm"],
     variants: ["Spanish Murcott"],
-    featured: false
+    featured: isSeasonAvailable("Nov", "Mar"),
   },
   {
     id: "lemons",
     slug: "lemons",
     name: "Lemons",
-    category: "Vegetables",
+    category: "Fruits",
     origin: "Egypt",
     exportType: "Fresh Produce",
-    shortDescription: "Fresh Egyptian lemons prepared with natural quality, export handling, and reliable supply standards.",
-    description: "Our Egyptian lemons are cultivated in ideal conditions and carefully selected to ensure premium quality, freshness, and export-ready shelf life.",
-    season: {"start": "Oct", "end": "Jan", "label": "Available from Oct to Jan"},
-    images: {"card": "/images/products/kiwi1.jpg", "main": "/images/products/kiwi1.jpg", "packing": []},
-    defaultPacking: ["15 kg plastic or carton box"],
-    sizes: ["88-100-113-125 mm"],
+    shortDescription: "Fresh Egyptian lemons with strong aroma and clean export presentation.",
+    description:
+      "Our lemons are graded and packed to deliver consistent quality, firm texture, and reliable freshness for international food service and retail markets.",
+    season: {
+      start: "Oct",
+      end: "Jan",
+      label: "Available from Oct to Jan",
+    },
+    images: {
+      card: "/images/products/lemons/lemons-card.jpg",
+      main: "/images/products/lemons/lemons-main.jpg",
+      packing: [
+        "/images/products/lemons/lemons-packing-1.jpg",
+        "/images/products/lemons/lemons-packing-2.jpg",
+        "/images/products/lemons/lemons-packing-3.jpg",
+        "/images/products/lemons/lemons-packing-4.jpg",
+        "/images/products/lemons/lemons-packing-5.jpg",
+      ],
+    },
+    defaultPacking: ["15kg plastic box", "15kg carton box"],
+    sizes: ["88 mm", "100 mm", "113 mm", "125 mm"],
     variants: [],
-    featured: false
+    featured: isSeasonAvailable("Oct", "Jan"),
   },
   {
     id: "grapes",
@@ -232,46 +425,92 @@ export const products: Product[] = [
     category: "Fruits",
     origin: "Egypt",
     exportType: "Fresh Produce",
-    shortDescription: "Fresh Egyptian grapes prepared with natural quality, export handling, and reliable supply standards.",
-    description: "Our Egyptian grapes are cultivated in ideal conditions and carefully selected to ensure premium quality, freshness, and export-ready shelf life.",
-    season: {"start": "May", "end": "Jul", "label": "Available from May to Jul"},
-    images: {"card": "/images/products/kiwi1.jpg", "main": "/images/products/kiwi1.jpg", "packing": []},
-    defaultPacking: ["5 kg plastic or carton box"],
-    sizes: ["-"],
+    shortDescription: "Fresh Egyptian grapes selected for sweetness, color, and export handling.",
+    description:
+      "Our grapes are carefully harvested and packed to preserve freshness, texture, and presentation throughout the export journey.",
+    season: {
+      start: "May",
+      end: "Jul",
+      label: "Available from May to Jul",
+    },
+    images: {
+      card: "/images/products/grapes/grapes-card.jpg",
+      main: "/images/products/grapes/grapes-main.jpg",
+      packing: [
+        "/images/products/grapes/grapes-packing-1.jpg",
+        "/images/products/grapes/grapes-packing-2.jpg",
+        "/images/products/grapes/grapes-packing-3.jpg",
+        "/images/products/grapes/grapes-packing-4.jpg",
+        "/images/products/grapes/grapes-packing-5.jpg",
+      ],
+    },
+    defaultPacking: ["5kg plastic box", "5kg carton box"],
+    sizes: ["As per client request"],
     variants: ["Crimson", "White"],
-    featured: false
+    featured: isSeasonAvailable("May", "Jul"),
   },
   {
     id: "bananas",
     slug: "bananas",
     name: "Bananas",
-    category: "Vegetables",
+    category: "Fruits",
     origin: "Egypt",
     exportType: "Fresh Produce",
-    shortDescription: "Fresh Egyptian bananas prepared with natural quality, export handling, and reliable supply standards.",
-    description: "Our Egyptian bananas are cultivated in ideal conditions and carefully selected to ensure premium quality, freshness, and export-ready shelf life.",
-    season: {"start": "Oct", "end": "Mar", "label": "Available from Oct to Mar"},
-    images: {"card": "/images/products/kiwi1.jpg", "main": "/images/products/kiwi1.jpg", "packing": []},
-    defaultPacking: ["18 kg carton box"],
-    sizes: ["-"],
+    shortDescription: "Egyptian bananas packed in export cartons with reliable quality standards.",
+    description:
+      "Our bananas are selected and packed to support freshness, safe handling, and consistent supply for regional and international markets.",
+    season: {
+      start: "Oct",
+      end: "Mar",
+      label: "Available from Oct to Mar",
+    },
+    images: {
+      card: "/images/products/bananas/bananas-card.jpg",
+      main: "/images/products/bananas/bananas-main.jpg",
+      packing: [
+        "/images/products/bananas/bananas-packing-1.jpg",
+        "/images/products/bananas/bananas-packing-2.jpg",
+        "/images/products/bananas/bananas-packing-3.jpg",
+        "/images/products/bananas/bananas-packing-4.jpg",
+        "/images/products/bananas/bananas-packing-5.jpg",
+      ],
+    },
+    defaultPacking: ["18kg carton box"],
+    sizes: ["As per client request"],
     variants: [],
-    featured: false
+    featured: isSeasonAvailable("Oct", "Mar"),
   },
   {
     id: "pomegranates",
     slug: "pomegranates",
     name: "Pomegranates",
-    category: "Vegetables",
+    category: "Fruits",
     origin: "Egypt",
     exportType: "Fresh Produce",
-    shortDescription: "Fresh Egyptian pomegranates prepared with natural quality, export handling, and reliable supply standards.",
-    description: "Our Egyptian pomegranates are cultivated in ideal conditions and carefully selected to ensure premium quality, freshness, and export-ready shelf life.",
-    season: {"start": "Sep", "end": "Nov", "label": "Available from Sep to Nov"},
-    images: {"card": "/images/products/kiwi1.jpg", "main": "/images/products/kiwi1.jpg", "packing": []},
-    defaultPacking: ["4.5 kg plastic box"],
+    shortDescription: "Fresh Egyptian pomegranates with rich color and premium seasonal quality.",
+    description:
+      "Our pomegranates are selected for appearance, size, and freshness, then packed carefully to protect the fruit during export and distribution.",
+    season: {
+      start: "Sep",
+      end: "Nov",
+      label: "Available from Sep to Nov",
+    },
+    images: {
+      card: "/images/products/pomegranates/pomegranates-card.jpg",
+      main: "/images/products/pomegranates/pomegranates-main.jpg",
+      packing: [
+        "/images/products/pomegranates/pomegranates-packing-1.jpg",
+        "/images/products/pomegranates/pomegranates-packing-2.jpg",
+        "/images/products/pomegranates/pomegranates-packing-3.jpg",
+        "/images/products/pomegranates/pomegranates-packing-4.jpg",
+        "/images/products/pomegranates/pomegranates-packing-5.jpg",
+        "/images/products/pomegranates/pomegranates-packing-6.jpg",
+      ],
+    },
+    defaultPacking: ["4.5kg plastic box"],
     sizes: ["65+ mm"],
     variants: [],
-    featured: false
+    featured: isSeasonAvailable("Sep", "Nov"),
   },
   {
     id: "grapefruit",
@@ -280,18 +519,34 @@ export const products: Product[] = [
     category: "Fruits",
     origin: "Egypt",
     exportType: "Fresh Produce",
-    shortDescription: "Fresh Egyptian grapefruit prepared with natural quality, export handling, and reliable supply standards.",
-    description: "Our Egyptian grapefruit are cultivated in ideal conditions and carefully selected to ensure premium quality, freshness, and export-ready shelf life.",
-    season: {"start": "Oct", "end": "Jan", "label": "Available from Oct to Jan"},
-    images: {"card": "/images/products/kiwi1.jpg", "main": "/images/products/kiwi1.jpg", "packing": []},
-    defaultPacking: ["15 kg carton", "plastic box"],
-    sizes: ["45", "50", "55 mm"],
+    shortDescription: "Fresh Egyptian grapefruit prepared with consistent sizing and export packing.",
+    description:
+      "Our grapefruit is selected for freshness, clean skin, and balanced flavor, then packed in carton or plastic boxes for international markets.",
+    season: {
+      start: "Oct",
+      end: "Jan",
+      label: "Available from Oct to Jan",
+    },
+    images: {
+      card: "/images/products/grapefruit/grapefruit-card.jpg",
+      main: "/images/products/grapefruit/grapefruit-main.jpg",
+      packing: [
+        "/images/products/grapefruit/grapefruit-packing-1.jpg",
+        "/images/products/grapefruit/grapefruit-packing-2.jpg",
+        "/images/products/grapefruit/grapefruit-packing-3.jpg",
+        "/images/products/grapefruit/grapefruit-packing-4.jpg",
+      ],
+    },
+    defaultPacking: ["15kg carton box", "15kg plastic box"],
+    sizes: ["45 mm", "50 mm", "55 mm"],
     variants: [],
-    featured: false
+    featured: isSeasonAvailable("Oct", "Jan"),
   },
 ];
 
-export const featuredProducts = products.filter((product) => product.featured).slice(0, 8);
+export const featuredProducts = products
+  .filter((product) => product.featured)
+  .slice(0, 8);
 
 export function getProductBySlug(slug: string) {
   return products.find((product) => product.slug === slug);

@@ -6,7 +6,13 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <article className="product-card">
       <div className="product-image">
-        <Image src={product.images.card} alt={product.name} width={520} height={360} />
+        <Image 
+          src={product.images.card} 
+          alt={product.name} 
+          fill
+          sizes="(max-width: 900px) 50vw, 33vw"
+          style={{ objectFit: 'cover' }}
+        />
       </div>
       <div className="product-card-body">
         <div className="product-card-head">
