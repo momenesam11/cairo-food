@@ -62,10 +62,12 @@ export function ContactSection() {
           </li>
           <li>
             <img src="/images/contact/contact-icon-mail.png" alt="Mail" />
-            <span>
-              {company.email}
-              <br />
-              {company.secondaryEmail}
+            <span className="flex flex-col gap-1">
+              {company.emails.map((email) => (
+                <a key={email} href={`mailto:${email}`} className="contact-email-link">
+                  {email}
+                </a>
+              ))}
             </span>
           </li>
         </ul>
@@ -132,10 +134,10 @@ export function ContactSection() {
           </div>
 
           <div className="form-buttons">
-            <button type="button" className="whatsapp-btn">
+            <a href="https://wa.me/201224165550" target="_blank" rel="noopener noreferrer" className="whatsapp-btn">
               <img src="/images/social/social-wa.png" className="w-[24px] h-[24px]" alt="WA" />
               <span>{t(T.contact.whatsapp, lang)}</span>
-            </button>
+            </a>
             <button type="submit" className="send-btn">
               <span>{t(T.contact.send, lang)}</span>
               <img src="/images/contact/icon-send.png" className="w-[30px] h-[30px]" alt="Send" />

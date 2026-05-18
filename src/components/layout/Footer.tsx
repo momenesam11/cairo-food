@@ -47,10 +47,16 @@ export function Footer() {
               <img src="/images/contact/contact-icon-phone.png" alt="Phone" />
               <span className="ltr-phone">{company.phone}</span>
             </p>
-            <p>
-              <img src="/images/contact/contact-icon-mail.png" alt="Mail" />
-              <span>{company.email}</span>
-            </p>
+            {company.emails.map((email) => (
+              <p key={email}>
+                <img src="/images/contact/contact-icon-mail.png" alt="Mail" />
+                <span>
+                  <a href={`mailto:${email}`} className="footer-email-link">
+                    {email}
+                  </a>
+                </span>
+              </p>
+            ))}
             <p>
               <img src="/images/contact/contact-icon-office.png" alt="Pin" />
               <span><strong>{t(T.footer.mainOffice, lang)}</strong> {lang === "ar" ? company.addressAr : company.address}</span>

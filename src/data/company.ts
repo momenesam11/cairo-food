@@ -2,8 +2,13 @@ export const company = {
   name: "Cairo Food International",
   established: "2014",
   phone: "+2 01224165550",
-  email: "Fady@cairofoodintl.com",
-  secondaryEmail: "info@cairofoodintl.com",
+  emails: [
+    "cairofoodintl@gmail.com",
+    "Fady@cairofoodintl.com",
+    "info@cairofoodintl.com"
+  ],
+  email: "cairofoodintl@gmail.com",
+  secondaryEmail: "Fady@cairofoodintl.com",
   address: "19 Abdel Galil Street, Al-Zaytoun – Cairo – Arab Republic of Egypt.",
   addressAr: "19 شارع عبد الجليل, الزيتون – القاهرة – جمهورية مصر العربية",
   packingHouse: "Abu Al Ghar, Kafr El Zayat, Gharbia Governorate.",
