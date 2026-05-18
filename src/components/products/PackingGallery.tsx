@@ -64,7 +64,7 @@ export function PackingGallery({ images, wrapperHeight = "280px", wrapperClassNa
     const container = scrollRef.current;
     const item = container.children[index] as HTMLElement;
     if (item) {
-      container.scrollTo({ left: item.offsetLeft, behavior: "smooth" });
+      item.scrollIntoView({ behavior: "auto", block: "nearest", inline: "center" });
       setActiveMobileIndex(index);
     }
   };
@@ -72,7 +72,8 @@ export function PackingGallery({ images, wrapperHeight = "280px", wrapperClassNa
   const handleScroll = () => {
     if (!scrollRef.current) return;
     const container = scrollRef.current;
-    const index = Math.round(container.scrollLeft / container.clientWidth);
+    const scrollLeftAbs = Math.abs(container.scrollLeft);
+    const index = Math.round(scrollLeftAbs / container.clientWidth);
     setActiveMobileIndex(index);
   };
 

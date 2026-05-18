@@ -45,7 +45,7 @@ export function Footer() {
           <div className="footer-contact">
             <p>
               <img src="/images/contact/contact-icon-phone.png" alt="Phone" />
-              <span>{company.phone}</span>
+              <span className="ltr-phone">{company.phone}</span>
             </p>
             <p>
               <img src="/images/contact/contact-icon-mail.png" alt="Mail" />
@@ -53,11 +53,11 @@ export function Footer() {
             </p>
             <p>
               <img src="/images/contact/contact-icon-office.png" alt="Pin" />
-              <span><strong>{t(T.footer.mainOffice, lang)}</strong> {company.address}</span>
+              <span><strong>{t(T.footer.mainOffice, lang)}</strong> {lang === "ar" ? company.addressAr : company.address}</span>
             </p>
             <p>
               <img src="/images/contact/contact-icon-factory.png" alt="Factory" />
-              <span><strong>{t(T.footer.packingHouse, lang)}</strong> {company.packingHouse}</span>
+              <span><strong>{t(T.footer.packingHouse, lang)}</strong> {lang === "ar" ? company.packingHouseAr : company.packingHouse}</span>
             </p>
           </div>
         </div>

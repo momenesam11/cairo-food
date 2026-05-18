@@ -149,7 +149,7 @@ export const translations = {
     headingStrong:{ en: "Categories",   ar: "المنتجات" },
     body:         { en: "High-quality produce and food supplies, carefully sourced and prepared to meet the needs of global buyers.", ar: "منتجات وإمدادات غذائية عالية الجودة، مُختارة ومُعدَّة بعناية لتلبية احتياجات المشترين العالميين." },
     cats: [
-      { title: { en: "Fresh Produce",  ar: "منتجات طازجة" }, desc: { en: "Farm-Fresh Fruits And Vegetables Handpicked At Peak Ripeness For Maximum Quality And Flavor.", ar: "فواكه وخضروات طازجة مقطوفة يدوياً عند قمة نضجها لأقصى قدر من الجودة والنكهة." } },
+      { title: { en: "Fresh Produce",  ar: "منتجات طازجة" }, desc: { en: "Farm-Fresh Fruits And Vegetables Handpicked At Peak Ripeness For Maximum Quality And Flavor.", ar: "فواكه وخضروات طازجة مقطوفة يدوياً عند قمة نضجها لأقصى قدر من الجودة." } },
       { title: { en: "Frozen Produce", ar: "منتجات مجمدة" }, desc: { en: "Farm-Fresh Fruits And Vegetables Handpicked At Peak Ripeness For Maximum Quality And Flavor.", ar: "فواكه وخضروات مجمدة بتقنيات حديثة للحفاظ على القيمة الغذائية والطعم." } },
       { title: { en: "Agri Crops",     ar: "محاصيل زراعية" }, desc: { en: "Farm-Fresh Fruits And Vegetables Handpicked At Peak Ripeness For Maximum Quality And Flavor.", ar: "محاصيل زراعية متنوعة من أجود المزارع المصرية، مُعدَّة للتصدير الفوري." } },
     ],

@@ -8,6 +8,7 @@ export function ProductCard({ product, lang }: { product: Product, lang: Lang })
   const category = lang === 'ar' ? product.categoryAr ?? (product.category === 'Fruits' ? 'فواكه طازجة' : product.category === 'Vegetables' ? 'خضروات طازجة' : 'منتجات طازجة') : product.category;
   const shortDescription = lang === 'ar' ? product.shortDescriptionAr ?? product.shortDescription : product.shortDescription;
   const imageAlt = lang === 'ar' ? `${name} - ${category}` : `${name} - ${category}`;
+  const seasonLabel = lang === 'ar' ? product.season.labelAr ?? product.season.label : product.season.label;
 
   return (
     <article className="product-card">
@@ -25,6 +26,7 @@ export function ProductCard({ product, lang }: { product: Product, lang: Lang })
           <h3 className="">{name}</h3>
           <span className="category-tag">{category}</span>
         </div>
+        <span className="product-card-season">{seasonLabel}</span>
         <p>{shortDescription}</p>
         <Link href={`/products/${product.slug}`} className="view-details-btn">
           {t(T.products.viewDetails, lang)} 

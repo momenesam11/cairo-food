@@ -32,8 +32,8 @@ export function ProductsGrid({ limit }: { limit?: number }) {
       <div className="products-layout">
         <div className="products-header">
           <div className="section-title">
-            <span>{lang === 'en' ? 'Available' : 'متاح'}</span>
-            <h2>{lang === 'en' ? 'Products' : 'المنتجات'}</h2>
+            <span>{lang === 'en' ? 'Available' : 'المنتجات'}</span>
+            <h2>{lang === 'en' ? 'Products' : 'المتاحة'}</h2>
           </div>
           
           <div className="tabs">

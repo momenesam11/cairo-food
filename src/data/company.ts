@@ -5,7 +5,9 @@ export const company = {
   email: "Fady@cairofoodintl.com",
   secondaryEmail: "info@cairofoodintl.com",
   address: "19 Abdel Galil Street, Al-Zaytoun – Cairo – Arab Republic of Egypt.",
+  addressAr: "19 شارع عبد الجليل, الزيتون – القاهرة – جمهورية مصر العربية",
   packingHouse: "Abu Al Ghar, Kafr El Zayat, Gharbia Governorate.",
+  packingHouseAr: "ابو الغار - كفر الزيات - محافظة الغربية  جمهورية مصر العربية",
   about:
     "Established in 2014, Cairo Food International is a trusted name in Egypt's food and agricultural sectors. We specialize in producing, packaging, and exporting premium Egyptian fruits, vegetables, and food products to international markets.",
   vision:

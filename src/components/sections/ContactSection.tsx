@@ -46,18 +46,18 @@ export function ContactSection() {
         <ul className="contact-details-list">
           <li>
             <img src="/images/contact/contact-icon-phone.png" alt="Phone" />
-            <span>{company.phone}</span>
+            <span className="ltr-phone">{company.phone}</span>
           </li>
           <li>
             <img src="/images/contact/contact-icon-office.png" alt="Office" />
             <span>
-              {t(T.contact.mainOffice, lang)} {company.address}
+              {t(T.contact.mainOffice, lang)} {lang === "ar" ? company.addressAr : company.address}
             </span>
           </li>
           <li>
             <img src="/images/contact/contact-icon-factory.png" alt="Factory" />
             <span>
-              {t(T.contact.packingHouse, lang)} {company.packingHouse}
+              {t(T.contact.packingHouse, lang)} {lang === "ar" ? company.packingHouseAr : company.packingHouse}
             </span>
           </li>
           <li>
