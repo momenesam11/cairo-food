@@ -7,6 +7,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { useLang } from "@/lib/LanguageContext";
 import { translations as T, t } from "@/lib/translations";
+import emailjs from '@emailjs/browser';
 
 export function ContactSection() {
   const { lang } = useLang();
@@ -92,85 +93,53 @@ export function ContactSection() {
     return Object.keys(tempErrors).length === 0;
   };
 
-  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
 
-    if (!validateForm()) {
-      return;
-    }
+  if (!validateForm()) return;
 
-    // Honeypot anti-spam check: if filled, reject silently to confuse bots and pretend it succeeded
-    if (formData.honeypot && formData.honeypot.length > 0) {
-      console.warn("Spam attempt blocked via Honeypot check:", formData.honeypot);
-      setStatus({ type: "success" });
-      return;
-    }
+  setStatus({ type: 'submitting' });
 
-    setStatus({ type: "submitting" });
+  // Format local time matching Egypt Cairo local time format
+  const formattedTime = new Date().toLocaleString("en-US", { 
+    timeZone: "Africa/Cairo",
+    dateStyle: "medium",
+    timeStyle: "short"
+  });
 
-    // Format local time matching Egypt Cairo local time format
-    const formattedTime = new Date().toLocaleString("en-US", { 
-      timeZone: "Africa/Cairo",
-      dateStyle: "medium",
-      timeStyle: "short"
-    });
-
-    const emailjsParams = {
-      name: `${formData.first_name} ${formData.last_name}`,
-      email: formData.email,
-      title: `Web Inquiry from ${formData.first_name} ${formData.last_name} (${country ? country.label : ""})`,
-      time: formattedTime,
-      message: `Company: ${formData.company || "N/A"}\nPhone: ${phone}\nCountry: ${country ? country.label : ""}\n\nMessage:\n${formData.message}`
-    };
-
-    const emailjsPayload = {
-      service_id: "service_5hdpxqn",
-      template_id: "template_wzakcub",
-      user_id: "RMVITA0-xjFRA1Tm8",
-      template_params: emailjsParams,
-    };
-
-    try {
-      // Direct browser-to-server POST fetch to EmailJS REST API
-      // This will show up clearly in the browser's Network tab under "send"!
-      const response = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-        },
-        body: JSON.stringify(emailjsPayload),
-      });
-
-      if (response.ok) {
-        setStatus({ type: "success" });
-        setFormData({
-          first_name: "",
-          last_name: "",
-          email: "",
-          company: "",
-          message: "",
-          honeypot: "",
-        });
-        setPhone("");
-        setCountry(null);
-        setErrors({});
-      } else {
-        const errorText = await response.text();
-        console.error("EmailJS Error:", errorText);
-        setStatus({
-          type: "error",
-          message: t((T.contact as any).status.errorDesc, lang),
-        });
-      }
-    } catch (err) {
-      console.error("EmailJS Submit error:", err);
-      setStatus({
-        type: "error",
-        message: t((T.contact as any).status.errorDesc, lang),
-      });
-    }
+  const templateParams = {
+    name: `${formData.first_name} ${formData.last_name}`,
+    email: formData.email,
+    title: `Cairo Food Inquiry from ${formData.first_name} ${formData.last_name} (${country ? country.label : ""})`,
+    time: formattedTime,
+    message: `Company: ${formData.company || "N/A"}\nPhone: ${phone}\nCountry: ${country ? country.label : ""}\n\nMessage:\n${formData.message}`
   };
+
+  try {
+    const res = await emailjs.send(
+      'service_5hdpxqn',   // Service ID
+      'template_wzakcub',  // Template ID
+      templateParams,      // Mapped variables from react state
+      'RMVITA0-xjFRA1Tm8'  // User ID
+    );
+    console.log("EmailJS Send Success:", res);
+    setStatus({ type: 'success', message: 'تم إرسال الرسالة بنجاح!' });
+    setFormData({
+      first_name: '',
+      last_name: '',
+      email: '',
+      company: '',
+      message: '',
+      honeypot: '',
+    });
+    setPhone("");
+    setCountry(null);
+    setErrors({});
+  } catch (err) {
+    console.error("EmailJS Send Error:", err);
+    setStatus({ type: 'error', message: 'حدث خطأ، حاول مرة أخرى.' });
+  }
+};
 
   const handleResetForm = () => {
     setStatus({ type: "idle" });
@@ -281,7 +250,7 @@ export function ContactSection() {
             </button>
           </div>
         ) : (
-          <form className="modern-form" onSubmit={handleFormSubmit}>
+          <form className="modern-form" onSubmit={handleSubmit}>
             {status.type === "error" && (
               <div className="form-status-alert error">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-5 h-5 flex-shrink-0">

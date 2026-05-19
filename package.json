@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@tailwindcss/postcss": "latest",
     "country-list": "^2.4.1",
     "next": "latest",

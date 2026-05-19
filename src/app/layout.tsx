@@ -20,6 +20,11 @@ export const metadata: Metadata = {
   title: "Cairo Food International | كايرو فود إنترناشيونال",
   description:
     "Premium Egyptian fresh produce and food supply exports for global markets. | تصدير أجود المنتجات الطازجة والغذائية المصرية للأسواق العالمية.",
+  icons: {
+    icon: "/images/fav.png",
+    shortcut: "/images/fav.png",
+    apple: "/images/fav.png",
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
