@@ -141,6 +141,21 @@ export const translations = {
     messagePlaceholder: { en: "e.g I ask about ....", ar: "مثال: أرغب في الاستفسار عن..." },
     whatsapp:    { en: "WhatsApp",       ar: "واتساب" },
     send:        { en: "Send",           ar: "إرسال" },
+    validation: {
+      firstNameMin: { en: "First name must be at least 2 characters", ar: "الاسم الأول يجب أن يكون حرفين على الأقل" },
+      lastNameMin: { en: "Last name must be at least 2 characters", ar: "اسم العائلة يجب أن يكون حرفين على الأقل" },
+      emailInvalid: { en: "Please enter a valid email address", ar: "البريد الإلكتروني غير صالح" },
+      phoneInvalid: { en: "Please enter a valid phone number", ar: "يرجى إدخال رقم هاتف صالح" },
+      countryRequired: { en: "Please select your country", ar: "يرجى اختيار الدولة" },
+      messageMin: { en: "Message must be at least 10 characters", ar: "الرسالة يجب أن تكون 10 أحرف على الأقل" },
+    },
+    status: {
+      successTitle: { en: "Message Sent Successfully!", ar: "تم إرسال رسالتك بنجاح!" },
+      successDesc: { en: "Thank you for contacting Cairo Food. We will review your request and get back to you shortly.", ar: "نشكرك على تواصلك مع كايرو فود. سنراجع طلبك ونرد عليك في أقرب وقت ممكن." },
+      errorTitle: { en: "Failed to Send Message", ar: "فشل إرسال الرسالة" },
+      errorDesc: { en: "An error occurred while sending your message. Please try again later.", ar: "حدث خطأ أثناء إرسال رسالتك. يرجى المحاولة مرة أخرى لاحقاً." },
+      sending: { en: "Sending...", ar: "جاري الإرسال..." },
+    }
   },
 
   // ─── Product Categories ──────────────────────────────────────
