@@ -51,13 +51,29 @@ export function ContactSection() {
           <li>
             <img src="/images/contact/contact-icon-office.png" alt="Office" />
             <span>
-              {t(T.contact.mainOffice, lang)} {lang === "ar" ? company.addressAr : company.address}
+              <strong>{t(T.contact.mainOffice, lang)}</strong>{" "}
+              <a
+                href={company.officeMapUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="contact-map-link"
+              >
+                {lang === "ar" ? company.addressAr : company.address}
+              </a>
             </span>
           </li>
           <li>
             <img src="/images/contact/contact-icon-factory.png" alt="Factory" />
             <span>
-              {t(T.contact.packingHouse, lang)} {lang === "ar" ? company.packingHouseAr : company.packingHouse}
+              <strong>{t(T.contact.packingHouse, lang)}</strong>{" "}
+              <a
+                href={company.packingHouseMapUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="contact-map-link"
+              >
+                {lang === "ar" ? company.packingHouseAr : company.packingHouse}
+              </a>
             </span>
           </li>
           <li>

@@ -13,6 +13,8 @@ export const company = {
   addressAr: "19 شارع عبد الجليل, الزيتون – القاهرة – جمهورية مصر العربية",
   packingHouse: "Abu Al Ghar, Kafr El Zayat, Gharbia Governorate.",
   packingHouseAr: "ابو الغار - كفر الزيات - محافظة الغربية  جمهورية مصر العربية",
+  officeMapUrl: "https://maps.app.goo.gl/7rHtxjjSmSbrTc9M8",
+  packingHouseMapUrl: "https://maps.app.goo.gl/eLwPeLevEY5WuoVQ8",
   about:
     "Established in 2014, Cairo Food International is a trusted name in Egypt's food and agricultural sectors. We specialize in producing, packaging, and exporting premium Egyptian fruits, vegetables, and food products to international markets.",
   vision:

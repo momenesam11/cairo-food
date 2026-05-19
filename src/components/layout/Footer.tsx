@@ -59,11 +59,31 @@ export function Footer() {
             ))}
             <p>
               <img src="/images/contact/contact-icon-office.png" alt="Pin" />
-              <span><strong>{t(T.footer.mainOffice, lang)}</strong> {lang === "ar" ? company.addressAr : company.address}</span>
+              <span>
+                <strong>{t(T.footer.mainOffice, lang)}</strong>{" "}
+                <a
+                  href={company.officeMapUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="footer-map-link"
+                >
+                  {lang === "ar" ? company.addressAr : company.address}
+                </a>
+              </span>
             </p>
             <p>
               <img src="/images/contact/contact-icon-factory.png" alt="Factory" />
-              <span><strong>{t(T.footer.packingHouse, lang)}</strong> {lang === "ar" ? company.packingHouseAr : company.packingHouse}</span>
+              <span>
+                <strong>{t(T.footer.packingHouse, lang)}</strong>{" "}
+                <a
+                  href={company.packingHouseMapUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="footer-map-link"
+                >
+                  {lang === "ar" ? company.packingHouseAr : company.packingHouse}
+                </a>
+              </span>
             </p>
           </div>
         </div>
