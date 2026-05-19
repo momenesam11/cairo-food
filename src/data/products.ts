@@ -73,6 +73,7 @@ export const products: Product[] = [
         "/images/products/potatoes/potatoes-packing-5.jpg",
         "/images/products/potatoes/potatoes-packing-6.jpg",
         "/images/products/potatoes/potatoes-packing-7.jpg",
+        "/images/products/potatoes/potatoes-packing-8.jpg",
       ],
     },
     defaultPacking: ["25kg jute bags", "20kg jute bags", "10kg jute bags", "25kg mesh bags"],

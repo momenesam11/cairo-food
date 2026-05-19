@@ -29,7 +29,7 @@ export const company = {
 export const processSteps = [
   {
     title: "Sourcing",
-    text: "Selected From Trusted Egyptian Farms.",
+    text: "Sourced Directly From Our Farms and Trusted Partners",
     icon: "sprout"
   },
   {

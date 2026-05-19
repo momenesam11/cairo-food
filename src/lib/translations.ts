@@ -86,7 +86,7 @@ export const translations = {
     exploreBtn:  { en: "Explore Products", ar: "استعرض المنتجات" },
     quoteBtn:    { en: "Request a Quote",  ar: "اطلب عرض سعر" },
     steps: {
-      sourcing:   { title: { en: "Sourcing",   ar: "التوريد" },   text: { en: "Selected From Trusted Egyptian Farms.",       ar: "مُختار من مزارع مصرية موثوقة." } },
+      sourcing:   { title: { en: "Sourcing",   ar: "التوريد" },   text: { en: "Sourced Directly From Our Farms and Trusted Partners",       ar: "من مزارعنا وشركائنا الموثوقين إليكم مباشرة" } },
       sorting:    { title: { en: "Sorting",    ar: "الفرز" },     text: { en: "Checked And Graded For Export Quality.",     ar: "فحص وتصنيف وفق معايير جودة التصدير." } },
       packaging:  { title: { en: "Packaging",  ar: "التعبئة" },   text: { en: "Packed Carefully To Preserve Freshness.",    ar: "تعبئة دقيقة للحفاظ على الطازجية." } },
       shipping:   { title: { en: "Shipping",   ar: "الشحن" },     text: { en: "Delivered To Global Markets On Time.",       ar: "توصيل إلى الأسواق العالمية في الوقت المحدد." } },
