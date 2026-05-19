@@ -111,6 +111,7 @@ export const products: Product[] = [
         "/images/products/carrots/carrots-packing-4.jpg",
         "/images/products/carrots/carrots-packing-5.jpg",
         "/images/products/carrots/carrots-packing-6.jpg",
+        "/images/products/carrots/carrots-packing-7.jpg",
       ],
     },
     defaultPacking: ["Jumbo bags", "10kg bags", "1kg bags"],
