@@ -80,53 +80,63 @@ export async function POST(request: Request) {
       );
     }
 
-    // 3. Forward to Formspree Endpoint with the exact required keys:
-    // - first_name
-    // - last_name
-    // - email
-    // - company
-    // - phone
-    // - message
-    const formspreePayload = {
-      first_name: sanitizedFirstName,
-      last_name: sanitizedLastName,
+    // 3. Prepare EmailJS Template Parameters matching Fady's template variables:
+    // - name: {{name}}
+    // - email: {{email}} (reply-to)
+    // - title: {{title}} (subject title)
+    // - time: {{time}}
+    // - message: {{message}} (Formatted to pack company, phone, and country details)
+    const formattedTime = new Date().toLocaleString("en-US", { 
+      timeZone: "Africa/Cairo",
+      dateStyle: "medium",
+      timeStyle: "short"
+    });
+
+    const emailjsParams = {
+      name: `${sanitizedFirstName} ${sanitizedLastName}`,
       email: sanitizedEmail,
-      company: sanitizedCompany,
-      phone: sanitizedPhone,
-      country: sanitizedCountry,
-      message: sanitizedMessage,
+      title: `Web Inquiry from ${sanitizedFirstName} ${sanitizedLastName} (${sanitizedCountry})`,
+      time: formattedTime,
+      message: `Company: ${sanitizedCompany || "N/A"}\nPhone: ${sanitizedPhone}\nCountry: ${sanitizedCountry}\n\nMessage:\n${sanitizedMessage}`
     };
 
-    console.log("Forwarding securely to Formspree from server-side proxy:", formspreePayload);
+    const emailjsPayload = {
+      service_id: "service_5hdpxqn",
+      template_id: "template_wzakcub",
+      user_id: "RMVITA0-xjFRA1Tm8",
+      template_params: emailjsParams,
+    };
 
-    // Using server-side fetch to Formspree bypasses CORS and Allowed Referrers restrictions on localhost!
-    const formspreeResponse = await fetch("https://formspree.io/f/xeedodqo", {
+    console.log("Submitting securely to EmailJS API:", emailjsPayload);
+
+    // Using server-side fetch to EmailJS bypasses browser CORS issues and ad-blockers!
+    const emailjsResponse = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
       },
-      body: JSON.stringify(formspreePayload),
+      body: JSON.stringify(emailjsPayload),
     });
 
-    if (!formspreeResponse.ok) {
-      const errorText = await formspreeResponse.text();
-      console.error("Formspree forward failed:", errorText);
+    if (!emailjsResponse.ok) {
+      const errorText = await emailjsResponse.text();
+      console.error("EmailJS API submission failed:", errorText);
       return NextResponse.json(
-        { success: false, message: "Failed to submit message to Formspree. Please check your Formspree account setup." },
+        { success: false, message: "Failed to dispatch message via EmailJS. Please check credentials." },
         { status: 502 }
       );
     }
 
-    console.log("Formspree submission successful!");
+    console.log("EmailJS message dispatched successfully!");
 
     return NextResponse.json(
       {
         success: true,
-        message: "Message received and submitted successfully via Formspree.",
+        message: "Message processed and dispatched successfully.",
         data: {
-          firstName: sanitizedFirstName,
-          lastName: sanitizedLastName,
+          first_name: sanitizedFirstName,
+          last_name: sanitizedLastName,
         },
       },
       { status: 200 }

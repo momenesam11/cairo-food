@@ -108,24 +108,41 @@ export function ContactSection() {
 
     setStatus({ type: "submitting" });
 
+    // Format local time matching Egypt Cairo local time format
+    const formattedTime = new Date().toLocaleString("en-US", { 
+      timeZone: "Africa/Cairo",
+      dateStyle: "medium",
+      timeStyle: "short"
+    });
+
+    const emailjsParams = {
+      name: `${formData.first_name} ${formData.last_name}`,
+      email: formData.email,
+      title: `Web Inquiry from ${formData.first_name} ${formData.last_name} (${country ? country.label : ""})`,
+      time: formattedTime,
+      message: `Company: ${formData.company || "N/A"}\nPhone: ${phone}\nCountry: ${country ? country.label : ""}\n\nMessage:\n${formData.message}`
+    };
+
+    const emailjsPayload = {
+      service_id: "service_5hdpxqn",
+      template_id: "template_wzakcub",
+      user_id: "RMVITA0-xjFRA1Tm8",
+      template_params: emailjsParams,
+    };
+
     try {
-      // Submitting via our secure server route handler handles Formspree delivery reliably
-      // by bypassing CORS and Allowed Referrers restrictions on localhost!
-      const response = await fetch("/api/contact", {
+      // Direct browser-to-server POST fetch to EmailJS REST API
+      // This will show up clearly in the browser's Network tab under "send"!
+      const response = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Accept": "application/json",
         },
-        body: JSON.stringify({
-          ...formData,
-          phone,
-          country,
-        }),
+        body: JSON.stringify(emailjsPayload),
       });
 
-      const result = await response.json();
-
-      if (response.ok && result.success) {
+      if (response.ok) {
         setStatus({ type: "success" });
         setFormData({
           first_name: "",
@@ -139,13 +156,15 @@ export function ContactSection() {
         setCountry(null);
         setErrors({});
       } else {
+        const errorText = await response.text();
+        console.error("EmailJS Error:", errorText);
         setStatus({
           type: "error",
-          message: result.message || t((T.contact as any).status.errorDesc, lang),
+          message: t((T.contact as any).status.errorDesc, lang),
         });
       }
     } catch (err) {
-      console.error("Secure submit error:", err);
+      console.error("EmailJS Submit error:", err);
       setStatus({
         type: "error",
         message: t((T.contact as any).status.errorDesc, lang),
