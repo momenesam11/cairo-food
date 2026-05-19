@@ -10,23 +10,176 @@ import { translations as T, t } from "@/lib/translations";
 
 export function ContactSection() {
   const { lang } = useLang();
-  const [phone, setPhone]   = useState("");
+  const [phone, setPhone] = useState("");
   const [country, setCountry] = useState<any>(null);
+
+  const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    company: "",
+    message: "",
+    honeypot: "", // Bot prevention honeypot field
+  });
+
+  const [errors, setErrors] = useState<{
+    first_name?: string;
+    last_name?: string;
+    email?: string;
+    phone?: string;
+    country?: string;
+    message?: string;
+  }>({});
+
+  const [status, setStatus] = useState<{
+    type: "idle" | "submitting" | "success" | "error";
+    message?: string;
+  }>({ type: "idle" });
+
+  const isSuccess = status.type === "success";
 
   const options = useMemo(
     () => countryList.getData().map((c) => ({ value: c.code, label: c.name })),
     []
   );
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    // Proactively clear the error for this field
+    if (errors[name as keyof typeof errors]) {
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
+  };
+
+  const validateForm = () => {
+    const tempErrors: typeof errors = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!formData.first_name.trim()) {
+      tempErrors.first_name = t((T.contact as any).validation.firstNameMin, lang);
+    } else if (formData.first_name.trim().length < 2) {
+      tempErrors.first_name = t((T.contact as any).validation.firstNameMin, lang);
+    }
+
+    if (!formData.last_name.trim()) {
+      tempErrors.last_name = t((T.contact as any).validation.lastNameMin, lang);
+    } else if (formData.last_name.trim().length < 2) {
+      tempErrors.last_name = t((T.contact as any).validation.lastNameMin, lang);
+    }
+
+    if (!formData.email.trim()) {
+      tempErrors.email = t((T.contact as any).validation.emailInvalid, lang);
+    } else if (!emailRegex.test(formData.email.trim())) {
+      tempErrors.email = t((T.contact as any).validation.emailInvalid, lang);
+    }
+
+    if (!phone || phone.replace(/\D/g, "").length < 8) {
+      tempErrors.phone = t((T.contact as any).validation.phoneInvalid, lang);
+    }
+
+    if (!country) {
+      tempErrors.country = t((T.contact as any).validation.countryRequired, lang);
+    }
+
+    if (!formData.message.trim()) {
+      tempErrors.message = t((T.contact as any).validation.messageMin, lang);
+    } else if (formData.message.trim().length < 10) {
+      tempErrors.message = t((T.contact as any).validation.messageMin, lang);
+    }
+
+    setErrors(tempErrors);
+    return Object.keys(tempErrors).length === 0;
+  };
+
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    // Honeypot anti-spam check: if filled, reject silently to confuse bots and pretend it succeeded
+    if (formData.honeypot && formData.honeypot.length > 0) {
+      console.warn("Spam attempt blocked via Honeypot check:", formData.honeypot);
+      setStatus({ type: "success" });
+      return;
+    }
+
+    setStatus({ type: "submitting" });
+
+    try {
+      // Submitting via our secure server route handler handles Formspree delivery reliably
+      // by bypassing CORS and Allowed Referrers restrictions on localhost!
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          phone,
+          country,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        setStatus({ type: "success" });
+        setFormData({
+          first_name: "",
+          last_name: "",
+          email: "",
+          company: "",
+          message: "",
+          honeypot: "",
+        });
+        setPhone("");
+        setCountry(null);
+        setErrors({});
+      } else {
+        setStatus({
+          type: "error",
+          message: result.message || t((T.contact as any).status.errorDesc, lang),
+        });
+      }
+    } catch (err) {
+      console.error("Secure submit error:", err);
+      setStatus({
+        type: "error",
+        message: t((T.contact as any).status.errorDesc, lang),
+      });
+    }
+  };
+
+  const handleResetForm = () => {
+    setStatus({ type: "idle" });
+    setFormData({
+      first_name: "",
+      last_name: "",
+      email: "",
+      company: "",
+      message: "",
+      honeypot: "",
+    });
+    setPhone("");
+    setCountry(null);
+    setErrors({});
+  };
+
   const customSelectStyles = {
-    control: (base: any) => ({
+    control: (base: any, state: any) => ({
       ...base,
       background: "#f4f4f4",
-      border: "0",
+      border: errors.country ? "1px solid #e53e3e" : "0",
       borderRadius: "8px",
       padding: "2px",
       boxShadow: "none",
       minHeight: "48px",
+      "&:hover": {
+        border: errors.country ? "1px solid #e53e3e" : "0",
+      }
     }),
     placeholder: (base: any) => ({ ...base, color: "#999", fontSize: "14px" }),
   };
@@ -89,77 +242,179 @@ export function ContactSection() {
         </ul>
       </div>
 
-      {/* ─── Form ─── */}
+      {/* ─── Form / Success Area ─── */}
       <div className="contact-form-area">
-        <form className="modern-form">
-          <div className="form-row">
-            <div className="form-group">
-              <label>{t(T.contact.firstName, lang)}</label>
-              <input type="text" placeholder={t(T.contact.firstPlaceholder, lang)} />
+        {isSuccess ? (
+          <div className="success-card-wrapper">
+            <div className="success-icon-circle">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+              </svg>
             </div>
-            <div className="form-group">
-              <label>{t(T.contact.lastName, lang)}</label>
-              <input type="text" placeholder={t(T.contact.lastPlaceholder, lang)} />
-            </div>
+            <h3>{t((T.contact as any).status.successTitle, lang)}</h3>
+            <p>{t((T.contact as any).status.successDesc, lang)}</p>
+            <button
+              type="button"
+              className="success-back-btn"
+              onClick={handleResetForm}
+            >
+              {lang === "ar" ? "إرسال رسالة أخرى" : "Send Another Message"}
+            </button>
           </div>
+        ) : (
+          <form className="modern-form" onSubmit={handleFormSubmit}>
+            {status.type === "error" && (
+              <div className="form-status-alert error">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-5 h-5 flex-shrink-0">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                </svg>
+                <span>{status.message}</span>
+              </div>
+            )}
 
-          <div className="form-row">
-            <div className="form-group">
-              <label>{t(T.contact.country, lang)}</label>
-              <Select
-                instanceId="contact-country-select"
-                inputId="contact-country-input"
-                options={options}
-                value={country}
-                onChange={(val: any) => setCountry(val)}
-                placeholder={t(T.contact.countryPlaceholder, lang)}
-                styles={customSelectStyles}
-                className="react-select-container"
-                classNamePrefix="react-select"
+            {/* Honeypot field (anti-spam) */}
+            <div className="honeypot-field" aria-hidden="true">
+              <input
+                type="text"
+                name="honeypot"
+                value={formData.honeypot}
+                onChange={handleInputChange}
+                tabIndex={-1}
+                autoComplete="off"
               />
             </div>
-            <div className="form-group">
-              <label>{t(T.contact.email, lang)}</label>
-              <input type="email" placeholder={t(T.contact.emailPlaceholder, lang)} />
-            </div>
-          </div>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label>{t(T.contact.phone, lang)}</label>
-              <div className="phone-input-wrap">
-                <PhoneInput
-                  country={country ? country.value.toLowerCase() : "eg"}
-                  value={phone}
-                  onChange={(val) => setPhone(val)}
-                  inputClass="phone-field-main"
-                  buttonClass="phone-field-btn"
-                  placeholder="0000 000 0000"
+            <div className="form-row">
+              <div className="form-group">
+                <label>{t(T.contact.firstName, lang)}</label>
+                <input
+                  type="text"
+                  name="first_name"
+                  value={formData.first_name}
+                  onChange={handleInputChange}
+                  placeholder={t(T.contact.firstPlaceholder, lang)}
+                  className={errors.first_name ? "input-error" : ""}
+                />
+                {errors.first_name && <span className="error-message">{errors.first_name}</span>}
+              </div>
+              <div className="form-group">
+                <label>{t(T.contact.lastName, lang)}</label>
+                <input
+                  type="text"
+                  name="last_name"
+                  value={formData.last_name}
+                  onChange={handleInputChange}
+                  placeholder={t(T.contact.lastPlaceholder, lang)}
+                  className={errors.last_name ? "input-error" : ""}
+                />
+                {errors.last_name && <span className="error-message">{errors.last_name}</span>}
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>{t(T.contact.country, lang)}</label>
+                <Select
+                  instanceId="contact-country-select"
+                  inputId="contact-country-input"
+                  options={options}
+                  value={country}
+                  onChange={(val: any) => {
+                    setCountry(val);
+                    if (errors.country) {
+                      setErrors((prev) => ({ ...prev, country: undefined }));
+                    }
+                  }}
+                  placeholder={t(T.contact.countryPlaceholder, lang)}
+                  styles={customSelectStyles}
+                  className={`react-select-container ${errors.country ? "react-select-container-error" : ""}`}
+                  classNamePrefix="react-select"
+                />
+                {errors.country && <span className="error-message">{errors.country}</span>}
+              </div>
+              <div className="form-group">
+                <label>{t(T.contact.email, lang)}</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  placeholder={t(T.contact.emailPlaceholder, lang)}
+                  className={errors.email ? "input-error" : ""}
+                />
+                {errors.email && <span className="error-message">{errors.email}</span>}
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>{t(T.contact.phone, lang)}</label>
+                <div className="phone-input-wrap">
+                  <PhoneInput
+                    country={country ? country.value.toLowerCase() : "eg"}
+                    value={phone}
+                    onChange={(val) => {
+                      setPhone(val);
+                      if (errors.phone) {
+                        setErrors((prev) => ({ ...prev, phone: undefined }));
+                      }
+                    }}
+                    inputClass={`phone-field-main ${errors.phone ? "input-error" : ""}`}
+                    buttonClass="phone-field-btn"
+                    placeholder="0000 000 0000"
+                  />
+                </div>
+                {errors.phone && <span className="error-message">{errors.phone}</span>}
+              </div>
+              <div className="form-group">
+                <label>{t(T.contact.company, lang)}</label>
+                <input
+                  type="text"
+                  name="company"
+                  value={formData.company}
+                  onChange={handleInputChange}
+                  placeholder={t(T.contact.companyPlaceholder, lang)}
                 />
               </div>
             </div>
-            <div className="form-group">
-              <label>{t(T.contact.company, lang)}</label>
-              <input type="text" placeholder={t(T.contact.companyPlaceholder, lang)} />
+
+            <div className="form-group full-width">
+              <label>{t(T.contact.message, lang)}</label>
+              <textarea
+                name="message"
+                value={formData.message}
+                onChange={handleInputChange}
+                placeholder={t(T.contact.messagePlaceholder, lang)}
+                className={errors.message ? "input-error" : ""}
+              />
+              {errors.message && <span className="error-message">{errors.message}</span>}
             </div>
-          </div>
 
-          <div className="form-group full-width">
-            <label>{t(T.contact.message, lang)}</label>
-            <textarea placeholder={t(T.contact.messagePlaceholder, lang)} />
-          </div>
-
-          <div className="form-buttons">
-            <a href="https://wa.me/201224165550" target="_blank" rel="noopener noreferrer" className="whatsapp-btn">
-              <img src="/images/social/social-wa.png" className="w-[24px] h-[24px]" alt="WA" />
-              <span>{t(T.contact.whatsapp, lang)}</span>
-            </a>
-            <button type="submit" className="send-btn">
-              <span>{t(T.contact.send, lang)}</span>
-              <img src="/images/contact/icon-send.png" className="w-[30px] h-[30px]" alt="Send" />
-            </button>
-          </div>
-        </form>
+            <div className="form-buttons">
+              <a href="https://wa.me/201224165550" target="_blank" rel="noopener noreferrer" className="whatsapp-btn">
+                <img src="/images/social/social-wa.png" className="w-[24px] h-[24px]" alt="WA" />
+                <span>{t(T.contact.whatsapp, lang)}</span>
+              </a>
+              <button
+                type="submit"
+                className="send-btn"
+                disabled={status.type === "submitting"}
+              >
+                {status.type === "submitting" ? (
+                  <>
+                    <div className="spinner"></div>
+                    <span>{t((T.contact as any).status.sending, lang)}</span>
+                  </>
+                ) : (
+                  <>
+                    <span>{t(T.contact.send, lang)}</span>
+                    <img src="/images/contact/icon-send.png" className="w-[30px] h-[30px]" alt="Send" />
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
+        )}
       </div>
     </section>
   );

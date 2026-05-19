@@ -19,7 +19,9 @@ export async function POST(request: Request) {
     const body = await request.json();
     const {
       firstName,
+      first_name,
       lastName,
+      last_name,
       email,
       phone,
       country,
@@ -28,11 +30,13 @@ export async function POST(request: Request) {
       honeypot, // Hidden security check field
     } = body;
 
-    // 1. Honeypot Anti-Spam Check: If the honeypot field is filled, reject the request
+    // Support both camelCase and snake_case request parameters for maximum resilience
+    const fName = firstName || first_name;
+    const lName = lastName || last_name;
+
+    // 1. Honeypot Anti-Spam Check: If the honeypot field is filled, reject/sink the request silently
     if (honeypot && honeypot.length > 0) {
       console.warn("Spam attempt blocked via Honeypot check:", { honeypot });
-      // Return 200 to confuse bots, or 400. 400 is fine, but returning success is a common technique to sink spam without revealing the protection.
-      // Let's return a success message so spam bots stop trying, but we don't process it.
       return NextResponse.json(
         { success: true, message: "Spam block triggered successfully." },
         { status: 200 }
@@ -42,19 +46,19 @@ export async function POST(request: Request) {
     // 2. Server-side Validation
     const errors: Record<string, string> = {};
 
-    const sanitizedFirstName = sanitizeInput(firstName);
-    const sanitizedLastName = sanitizeInput(lastName);
+    const sanitizedFirstName = sanitizeInput(fName);
+    const sanitizedLastName = sanitizeInput(lName);
     const sanitizedEmail = sanitizeInput(email);
     const sanitizedPhone = sanitizeInput(phone);
-    const sanitizedCountry = country ? sanitizeInput(country.value) : "";
+    const sanitizedCountry = country ? sanitizeInput(country.label) : "";
     const sanitizedCompany = sanitizeInput(company);
     const sanitizedMessage = sanitizeInput(message);
 
     if (!sanitizedFirstName || sanitizedFirstName.length < 2) {
-      errors.firstName = "First name must be at least 2 characters.";
+      errors.first_name = "First name must be at least 2 characters.";
     }
     if (!sanitizedLastName || sanitizedLastName.length < 2) {
-      errors.lastName = "Last name must be at least 2 characters.";
+      errors.last_name = "Last name must be at least 2 characters.";
     }
     if (!sanitizedEmail || !isValidEmail(sanitizedEmail)) {
       errors.email = "Please enter a valid email address.";
@@ -62,7 +66,7 @@ export async function POST(request: Request) {
     if (!sanitizedPhone || sanitizedPhone.length < 8) {
       errors.phone = "Please enter a valid phone number.";
     }
-    if (!sanitizedCountry) {
+    if (!country) {
       errors.country = "Please select a country.";
     }
     if (!sanitizedMessage || sanitizedMessage.length < 10) {
@@ -76,26 +80,50 @@ export async function POST(request: Request) {
       );
     }
 
-    // Log the secure, validated submission
-    console.log("Secure contact form submission received:", {
-      firstName: sanitizedFirstName,
-      lastName: sanitizedLastName,
+    // 3. Forward to Formspree Endpoint with the exact required keys:
+    // - first_name
+    // - last_name
+    // - email
+    // - company
+    // - phone
+    // - message
+    const formspreePayload = {
+      first_name: sanitizedFirstName,
+      last_name: sanitizedLastName,
       email: sanitizedEmail,
+      company: sanitizedCompany,
       phone: sanitizedPhone,
       country: sanitizedCountry,
-      company: sanitizedCompany,
       message: sanitizedMessage,
-      submittedAt: new Date().toISOString(),
+    };
+
+    console.log("Forwarding securely to Formspree from server-side proxy:", formspreePayload);
+
+    // Using server-side fetch to Formspree bypasses CORS and Allowed Referrers restrictions on localhost!
+    const formspreeResponse = await fetch("https://formspree.io/f/xeedodqo", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
+      body: JSON.stringify(formspreePayload),
     });
 
-    // In a real application, you would send an email here using nodemailer, SendGrid, Resend, or standard smtp.
-    // For now, we simulate a successful database/email sending operation.
-    await new Promise((resolve) => setTimeout(resolve, 800));
+    if (!formspreeResponse.ok) {
+      const errorText = await formspreeResponse.text();
+      console.error("Formspree forward failed:", errorText);
+      return NextResponse.json(
+        { success: false, message: "Failed to submit message to Formspree. Please check your Formspree account setup." },
+        { status: 502 }
+      );
+    }
+
+    console.log("Formspree submission successful!");
 
     return NextResponse.json(
       {
         success: true,
-        message: "Message received and logged securely.",
+        message: "Message received and submitted successfully via Formspree.",
         data: {
           firstName: sanitizedFirstName,
           lastName: sanitizedLastName,
