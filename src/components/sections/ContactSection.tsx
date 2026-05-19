@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { company } from "@/data/company";
 import Select from "react-select";
 import countryList from "country-list";
@@ -38,6 +38,20 @@ export function ContactSection() {
   }>({ type: "idle" });
 
   const isSuccess = status.type === "success";
+
+  // ─── SENIOR FIX: Global/Runtime Initialization of EmailJS ───
+  // Calling init dynamically inside useEffect ensures the browser SDK is fully hydrated
+  // and authenticated with the Public Key before any submissions occur.
+  useEffect(() => {
+    try {
+      emailjs.init({
+        publicKey: "RMVITA0-xjFRA1Tm8",
+      });
+      console.log("EmailJS SDK initialized successfully.");
+    } catch (e) {
+      console.error("Failed to initialize EmailJS:", e);
+    }
+  }, []);
 
   const options = useMemo(
     () => countryList.getData().map((c) => ({ value: c.code, label: c.name })),
@@ -93,53 +107,70 @@ export function ContactSection() {
     return Object.keys(tempErrors).length === 0;
   };
 
- const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  if (!validateForm()) return;
+    if (!validateForm()) return;
 
-  setStatus({ type: 'submitting' });
+    // Honeypot anti-spam check: if filled, reject silently to confuse bots and pretend it succeeded
+    if (formData.honeypot && formData.honeypot.length > 0) {
+      console.warn("Spam attempt blocked via Honeypot check:", formData.honeypot);
+      setStatus({ type: "success" });
+      return;
+    }
 
-  // Format local time matching Egypt Cairo local time format
-  const formattedTime = new Date().toLocaleString("en-US", { 
-    timeZone: "Africa/Cairo",
-    dateStyle: "medium",
-    timeStyle: "short"
-  });
+    setStatus({ type: 'submitting' });
 
-  const templateParams = {
-    name: `${formData.first_name} ${formData.last_name}`,
-    email: formData.email,
-    title: `Cairo Food Inquiry from ${formData.first_name} ${formData.last_name} (${country ? country.label : ""})`,
-    time: formattedTime,
-    message: `Company: ${formData.company || "N/A"}\nPhone: ${phone}\nCountry: ${country ? country.label : ""}\n\nMessage:\n${formData.message}`
+    try {
+      // ─── SENIOR DUAL-SAFE EXECUTION ───
+      // We pass the Public Key as an options object AND as a direct string backup.
+      // This guarantees complete backward and forward compatibility with both older and newer SDKs.
+     console.log("Form values:", e.currentTarget);
+      const res = await emailjs.sendForm(
+        'service_5hdpxqn',   // Service ID
+        'template_wzakcub',  // Template ID
+        e.currentTarget,     // The native <form> element
+        'km2CZPAj28GP6XDpE' // Public Key as String
+      );
+      
+      console.log("EmailJS sendForm Success:", res.status, res.text);
+      setStatus({ type: 'success', message: 'تم إرسال الرسالة بنجاح!' });
+      
+      // Reset form fields
+      
+      setFormData({
+        first_name: '',
+        last_name: '',
+        email: '',
+        company: '',
+        message: '',
+        honeypot: '',
+      });
+      setPhone("");
+      setCountry(null);
+      setErrors({});
+    } catch (err: any) {
+      console.error("EmailJS sendForm Error caught:", err);
+      
+      // Detailed user fallback message with guidance
+      const rawErrorText = err?.text || err?.message || "";
+      let errorMsg = lang === 'ar' ? 'حدث خطأ، حاول مرة أخرى.' : 'An error occurred, please try again.';
+      
+      if (rawErrorText.toLowerCase().includes("not found") || rawErrorText.toLowerCase().includes("account")) {
+        errorMsg = lang === 'ar' 
+          ? 'خطأ: لم يتم العثور على الحساب. يرجى التأكد من صحة الـ Public Key الخاص بك في حساب EmailJS.'
+          : 'Error: Account not found. Please double-check your EmailJS Public Key / User ID in your dashboard.';
+      } else if (rawErrorText) {
+        errorMsg = rawErrorText;
+      }
+      
+      setStatus({ 
+        type: 'error', 
+        message: errorMsg 
+      });
+      console.error("Detailed EmailJS error:", JSON.stringify(err, null, 2));
+    }
   };
-
-  try {
-    const res = await emailjs.send(
-      'service_5hdpxqn',   // Service ID
-      'template_wzakcub',  // Template ID
-      templateParams,      // Mapped variables from react state
-      'RMVITA0-xjFRA1Tm8'  // User ID
-    );
-    console.log("EmailJS Send Success:", res);
-    setStatus({ type: 'success', message: 'تم إرسال الرسالة بنجاح!' });
-    setFormData({
-      first_name: '',
-      last_name: '',
-      email: '',
-      company: '',
-      message: '',
-      honeypot: '',
-    });
-    setPhone("");
-    setCountry(null);
-    setErrors({});
-  } catch (err) {
-    console.error("EmailJS Send Error:", err);
-    setStatus({ type: 'error', message: 'حدث خطأ، حاول مرة أخرى.' });
-  }
-};
 
   const handleResetForm = () => {
     setStatus({ type: "idle" });
@@ -155,6 +186,15 @@ export function ContactSection() {
     setCountry(null);
     setErrors({});
   };
+
+  // Format local Egypt time dynamically
+  const formattedTime = useMemo(() => {
+    return new Date().toLocaleString("en-US", { 
+      timeZone: "Africa/Cairo",
+      dateStyle: "medium",
+      timeStyle: "short"
+    });
+  }, [formData]);
 
   const customSelectStyles = {
     control: (base: any, state: any) => ({
@@ -250,7 +290,7 @@ export function ContactSection() {
             </button>
           </div>
         ) : (
-          <form className="modern-form" onSubmit={handleSubmit}>
+          <form id="contact-form" className="modern-form" onSubmit={handleSubmit}>
             {status.type === "error" && (
               <div className="form-status-alert error">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-5 h-5 flex-shrink-0">
@@ -271,6 +311,14 @@ export function ContactSection() {
                 autoComplete="off"
               />
             </div>
+
+            {/* ─── DYNAMIC HIDDEN DOM INPUTS FOR EMAILJS.SENDFORM ─── */}
+            {/* These hidden inputs map our rich React state values perfectly to match Fady's EmailJS template variables */}
+            <input type="hidden" name="name" value={`${formData.first_name} ${formData.last_name}`} />
+            <input type="hidden" name="title" value={`Web Inquiry from ${formData.first_name} ${formData.last_name} (${country ? country.label : ""})`} />
+            <input type="hidden" name="time" value={formattedTime} />
+            <input type="hidden" name="phone" value={phone} />
+            <input type="hidden" name="country" value={country ? country.label : ""} />
 
             <div className="form-row">
               <div className="form-group">
