@@ -16,7 +16,7 @@ export function AboutPreview({ full = false }: { full?: boolean }) {
       <div className={`about-layout ${full ? "about-full" : ""}`}>
         <div className="about-collage-new">
           <div className="collage-main">
-            <Image src="/images/about/about-farm.png" alt="Egyptian farms" width={600} height={400} />
+            <Image src="/images/about/about-farm.png" alt="Egyptian farms" fill style={{ objectFit: "cover" }} />
           </div>
           <div className="collage-top-left">
             <Image src="/images/about/about-veg.jpg" alt="Fresh vegetables" width={200} height={240} />
