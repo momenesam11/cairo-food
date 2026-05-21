@@ -338,7 +338,8 @@ img { max-width: 100%; height: auto; object-fit: cover; }
 .section-title-center-lines strong { font-size: 30px; font-weight: 700; color: var(--green); }
 
 .about-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-.about-collage-new { position: relative; padding: 40px; }
+.about-collage-new { position: relative;
+    border: 13px solid #f0f0f0; }
 .collage-main img { border-radius: 0px; width: 100%; box-shadow: 0 10px 45px rgba(0,0,0,.1); }
 .collage-top-left { position: absolute; top: 0; left: 0; width: 35%; display: none;}
 .collage-top-left img {
@@ -959,7 +960,7 @@ img { max-width: 100%; height: auto; object-fit: cover; }
   .section-title-center-lines::before, .section-title-center-lines::after { height: 35px; width: 4px; }
   .section-title-center-lines span, .section-title-center-lines strong { font-size: 25px; }
   .about-layout { grid-template-columns: 1fr; gap: 40px; }
-  .about-collage-new { padding: 30px; }
+  .about-collage-new { }
   .about-content-new h3 { font-size: 22px; text-align: center; }
   .about-content-new p { font-size: 15px; text-align: center; }
   .feature-list li { font-size: 15px; }
