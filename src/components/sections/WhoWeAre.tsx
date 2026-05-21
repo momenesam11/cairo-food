@@ -17,7 +17,7 @@ export function WhoWeAre() {
           <p>{t(T.who.p2, lang)}</p>
         </div>
         <div className="who-image">
-          <Image src="/images/about/about-farm.jpg" alt="Farm Landscape" width={800} height={450} priority />
+          <Image src="/images/about/about-farm.png" alt="Farm Landscape" width={800} height={450} priority />
         </div>
       </div>
 
