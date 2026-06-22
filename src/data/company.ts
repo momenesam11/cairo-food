@@ -4,11 +4,10 @@ export const company = {
   phone: "+2 01224165550",
   emails: [
     "cairofoodintl@gmail.com",
-    "Fady@cairofoodintl.com",
-    "info@cairofoodintl.com"
+    "fady@cairofoodintl.eg"
   ],
   email: "cairofoodintl@gmail.com",
-  secondaryEmail: "Fady@cairofoodintl.com",
+  secondaryEmail: "fady@cairofoodintl.eg",
   address: "19 Abdel Galil Street, Al-Zaytoun – Cairo – Arab Republic of Egypt.",
   addressAr: "19 شارع عبد الجليل, الزيتون – القاهرة – جمهورية مصر العربية",
   packingHouse: "Abu Al Ghar, Kafr El Zayat, Gharbia Governorate.",

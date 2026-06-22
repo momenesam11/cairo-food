@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { PageHero } from "@/components/layout/PageHero";
 import { Footer } from "@/components/layout/Footer";
 import { ProductsGrid } from "@/components/products/ProductsGrid";
@@ -8,6 +9,10 @@ import { MarketsSection } from "@/components/sections/MarketsSection";
 import { WhyChooseUs } from "@/components/sections/WhyChooseUs";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { Reveal } from "@/components/ui/Reveal";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default function HomePage() {
   return (

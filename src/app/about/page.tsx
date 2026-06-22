@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Footer } from "@/components/layout/Footer";
 import { PageHero } from "@/components/layout/PageHero";
 import { WhoWeAre } from "@/components/sections/WhoWeAre";
@@ -7,6 +8,14 @@ import { PackingGallery } from "@/components/products/PackingGallery";
 import { CertificatesDetailed } from "@/components/sections/CertificatesDetailed";
 import { company } from "@/data/company";
 import { VisionMissionSection } from "@/components/sections/VisionMissionSection";
+
+export const metadata: Metadata = {
+  title: "About Us",
+  description:
+    "Established in 2014, Cairo Food International is a trusted exporter of premium Egyptian fruits, vegetables, and food products to international markets.",
+  alternates: { canonical: "/about" },
+  openGraph: { url: "/about", title: "About Cairo Food International" },
+};
 
 export default function AboutPage() {
   return (

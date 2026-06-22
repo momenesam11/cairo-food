@@ -119,8 +119,12 @@ img { max-width: 100%; height: auto; object-fit: cover; }
 
 /* Hero */
 .page-hero {
-  min-height: 580px; background-size: cover; background-position: center; position: relative; color: white;
+  min-height: 580px; position: relative; color: white;
   display: flex; flex-direction: column; overflow: hidden;
+}
+.page-hero-bg { object-fit: cover; object-position: center; z-index: 0; }
+.page-hero-overlay {
+  position: absolute; inset: 0; background: rgba(0,0,0,.6); z-index: 1;
 }
 .page-hero-content-wrapper { 
   display: flex; align-items: center; justify-content: space-between; flex: 1; position: relative; z-index: 2;

@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { Header } from "@/components/layout/Header";
 import { Button } from "@/components/ui/Button";
 import { useLang } from "@/lib/LanguageContext";
@@ -47,8 +48,17 @@ export function PageHero({
   return (
     <section
       className={`page-hero hero-${align} ${personImage ? "has-person" : ""}`}
-      style={{ backgroundImage: `linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)),url(${background})` }}
     >
+      <Image
+        src={background}
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        quality={65}
+        className="page-hero-bg"
+      />
+      <div className="page-hero-overlay" />
       <Header active={active} />
       <div className="shell page-hero-content-wrapper">
         <div className="page-hero-content">
@@ -68,7 +78,7 @@ export function PageHero({
 
         {personImage && (
           <div className="hero-person-image">
-            <img src={personImage} alt="Cairo Food Team" />
+            <Image src={personImage} alt="Cairo Food Team" width={1094} height={952} priority />
           </div>
         )}
       </div>
