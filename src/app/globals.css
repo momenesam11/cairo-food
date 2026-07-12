@@ -825,20 +825,8 @@ img { max-width: 100%; height: auto; object-fit: cover; }
 .packing-gallery-container { position: relative;margin-bottom: 100px; }
 .mobile-slider-controls { display: none; }
 .packing-gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; align-items: start; grid-auto-rows: minmax(0, auto); }
-/* About Us gallery: always use the arrow/dot slider (like mobile) instead of the grid, on every screen size. */
-.about-gallery-section .packing-gallery { display: flex; overflow-x: auto; overflow-y: hidden !important; scroll-snap-type: x mandatory; scrollbar-width: none; gap: 0; scroll-behavior: smooth; touch-action: pan-x; -webkit-overflow-scrolling: touch; align-items: stretch; }
-.about-gallery-section .packing-gallery::-webkit-scrollbar { display: none; }
-.about-gallery-section .gallery-item-wrapper { flex: 0 0 100%; scroll-snap-align: center; }
-.about-gallery-section .desktop-only { display: none !important; }
-.about-gallery-section .mobile-slider-controls { display: block; position: absolute; inset: 0; pointer-events: none; }
-.about-gallery-section .slider-arrow { position: absolute; top: 50%; transform: translateY(-50%); pointer-events: auto; background: transparent; color: white; border: none; padding: 10px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); cursor: pointer; }
-.about-gallery-section .slider-arrow.prev { left: 5px; }
-.about-gallery-section .slider-arrow.next { right: 5px; }
-.about-gallery-section .slider-dots { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; pointer-events: auto; }
-.about-gallery-section .slider-dot { width: 20px; height: 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.4); transition: 0.3s; cursor: pointer; }
-.about-gallery-section .slider-dot.active { background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-[dir="rtl"] .about-gallery-section .slider-arrow.prev { left: auto; right: 5px; transform: translateY(-50%) scaleX(-1); }
-[dir="rtl"] .about-gallery-section .slider-arrow.next { right: auto; left: 5px; transform: translateY(-50%) scaleX(-1); }
+/* About Us gallery: 4-in-a-row grid on desktop. Mobile already gets the swipeable arrow/dot slider from the shared max-width:900px rules below. */
+.about-gallery-section .packing-gallery { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .gallery-item-wrapper { position: relative; cursor: pointer; border-radius: 14px; overflow: hidden; min-height: 280px; background: #f7f7f7; display: block; }
 @media (min-width: 640px) {
   /* Generic gallery wrapper height - for galleries without specific scoped classes. */
