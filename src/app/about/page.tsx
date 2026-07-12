@@ -35,7 +35,7 @@ export default function AboutPage() {
       {/* This prevents any impact on Product Details or other shared gallery uses */}
       <section className="shell about-gallery-section" style={{ padding: "80px 0" }}>
         <PackingGallery
-          images={[1, 2, 3, 4, 5, 6].map((n) => `/images/gallery/gallery-${n}.jpg`)}
+          images={[1, 3, 5, 6].map((n) => `/images/gallery/gallery-${n}.jpg`)}
           wrapperHeight="460px"
           wrapperClassName="about-gallery-item h-60 sm:h-auto"
         />

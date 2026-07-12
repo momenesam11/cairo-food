@@ -825,6 +825,7 @@ img { max-width: 100%; height: auto; object-fit: cover; }
 .packing-gallery-container { position: relative;margin-bottom: 100px; }
 .mobile-slider-controls { display: none; }
 .packing-gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; align-items: start; grid-auto-rows: minmax(0, auto); }
+.about-gallery-section .packing-gallery { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .gallery-item-wrapper { position: relative; cursor: pointer; border-radius: 14px; overflow: hidden; min-height: 280px; background: #f7f7f7; display: block; }
 @media (min-width: 640px) {
   /* Generic gallery wrapper height - for galleries without specific scoped classes. */
