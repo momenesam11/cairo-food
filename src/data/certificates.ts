@@ -11,18 +11,20 @@ export const certificates = [
     logoImage: "/images/certificates/cert-iso.png",
     pdf: "/documents/iso-certificate.pdf"
   },
-  {
-    id: "gap",
-    eyebrow: "GLOBALG.A.P.",
-    eyebrowAr: "GLOBALG.A.P.",
-    title: "Good Agricultural Practices",
-    titleAr: "ممارسات زراعية جيدة",
-    desc: "GLOBALG.A.P. is the internationally recognized standard for farm production. Our certification demonstrates our commitment to safe and sustainable agriculture.",
-    descAr: "GLOBALG.A.P. هو المعيار المعترف به دوليًا للإنتاج الزراعي. شهادةنا تُظهر التزامنا بالزراعة الآمنة والمستدامة.",
-    image: "/images/certificates/globalgap-cert.jpg",
-    logoImage: "/images/certificates/cert-gap.png",
-    pdf: "/documents/gap-certificate.pdf"
-  },
+  // GLOBALG.A.P. temporarily hidden pending certificate renewal.
+  // Uncomment this entry to bring it back on the site.
+  // {
+  //   id: "gap",
+  //   eyebrow: "GLOBALG.A.P.",
+  //   eyebrowAr: "GLOBALG.A.P.",
+  //   title: "Good Agricultural Practices",
+  //   titleAr: "ممارسات زراعية جيدة",
+  //   desc: "GLOBALG.A.P. is the internationally recognized standard for farm production. Our certification demonstrates our commitment to safe and sustainable agriculture.",
+  //   descAr: "GLOBALG.A.P. هو المعيار المعترف به دوليًا للإنتاج الزراعي. شهادةنا تُظهر التزامنا بالزراعة الآمنة والمستدامة.",
+  //   image: "/images/certificates/globalgap-cert.jpg",
+  //   logoImage: "/images/certificates/cert-gap.png",
+  //   pdf: "/documents/gap-certificate.pdf"
+  // },
   {
     id: "smeta",
     eyebrow: "SMETA",
